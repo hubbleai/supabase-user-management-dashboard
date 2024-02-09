@@ -29,6 +29,13 @@ export const createClient = (cookieStore: ReturnType<typeof cookies>) => {
           }
         },
       },
-    },
+    }
   );
+};
+
+// New abstraction that initializes both cookieStore and Supabase client
+export const initializeSupabase = () => {
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+  return supabase;
 };
