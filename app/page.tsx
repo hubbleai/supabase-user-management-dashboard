@@ -1,7 +1,12 @@
 import { getUserOnServer } from "@/utils/supabase/user";
+import { getOrgsForUser } from "@/utils/supabase/orgs";
 
 export default async function Index() {
   const user = await getUserOnServer();
+
+  if (!user) return <div>Error fething user.</div>;
+
+  const orgs = await getOrgsForUser(user.id);
 
   return (
     <div className='flex-1 w-full flex flex-col gap-20 items-center'>
@@ -16,6 +21,9 @@ export default async function Index() {
             />
           </h2>
           <h3 className='text-2xl text-zinc-500'>Let's create</h3>
+          {orgs.map((orgs) => {
+            return <div key={orgs.org_id}>{orgs.org_name}</div>;
+          })}
         </main>
       </div>
     </div>
