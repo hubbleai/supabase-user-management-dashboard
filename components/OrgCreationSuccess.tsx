@@ -7,11 +7,11 @@ import { CheckCircle } from 'lucide-react';
 
 function OrgCreationSuccess() {
     const searchParams = useSearchParams();
-    const org = useOrgsStore((state) => state.orgs)[0];
+    const { activeOrg } = useOrgsStore();
 
     const search = searchParams.get('orgCreated');
 
-    if (!org) {
+    if (!activeOrg) {
         return null;
     }
 
@@ -24,7 +24,7 @@ function OrgCreationSuccess() {
                 </h1>
                 <h2>
                     <span className="underline underline-offset-4">
-                        {org.org_name}
+                        {activeOrg.org_name}
                     </span>{' '}
                     is now active on of Carbon. 🎉
                 </h2>

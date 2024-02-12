@@ -7,7 +7,7 @@ import { useOrgsStore } from '@/store/useOrgsStore';
 const supabase = createClient();
 
 const InjectOrgsState = () => {
-    const { setOrgs, setLoading } = useOrgsStore();
+    const { activeOrg, setActiveOrg, setOrgs, setLoading } = useOrgsStore();
 
     // Function to fetch organizations and update the state
     const fetchAndUpdateOrgs = async () => {
@@ -24,6 +24,9 @@ const InjectOrgsState = () => {
 
         if (orgs) {
             setOrgs(orgs);
+            if (!activeOrg) {
+                setActiveOrg(orgs[0]);
+            }
             setLoading(false);
         }
     };

@@ -1,0 +1,94 @@
+'use client';
+
+import Link from 'next/link';
+import { Check, ChevronsUpDown } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import {
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+} from '@/components/ui/command';
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '@/components/ui/popover';
+import { useState } from 'react';
+import { useOrgsStore } from '@/store/useOrgsStore';
+
+function OrgSelector() {
+    const [open, setOpen] = useState(false);
+
+    const { activeOrg, orgs, loading, setActiveOrg } = useOrgsStore();
+
+    if (loading || !orgs.length) {
+        return (
+            <Link href="/">
+                <h1 className="text-2xl font-bold text-zinc-700">Carbon</h1>
+            </Link>
+        );
+    }
+    return (
+        <div className="flex items-center">
+            <Link href="/">
+                <h1 className="text-2xl font-bold text-zinc-700">Carbon</h1>
+            </Link>
+            <div className="flex items-center animate-in">
+                <div className="mx-4 h-6 w-[1px] rotate-[20deg] bg-zinc-400"></div>
+                <Popover open={open} onOpenChange={setOpen}>
+                    <PopoverTrigger asChild>
+                        <Button
+                            variant="outline"
+                            role="combobox"
+                            aria-expanded={open}
+                            className="w-[200px] justify-between"
+                        >
+                            {activeOrg?.org_name ?? 'No Org Found'}
+                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[200px] p-0">
+                        <Command>
+                            <CommandInput placeholder="Search Org..." />
+                            <CommandEmpty>No org found.</CommandEmpty>
+                            <CommandGroup>
+                                {orgs.map((org) => (
+                                    <CommandItem
+                                        key={org.org_id}
+                                        value={org.org_id}
+                                        onSelect={(currentValue) => {
+                                            // get org from orgs based on org_id
+                                            const newOrg = orgs.find(
+                                                (org) =>
+                                                    org.org_id === currentValue
+                                            );
+
+                                            // set active org
+                                            if (newOrg) setActiveOrg(newOrg);
+                                            setOpen(false);
+                                        }}
+                                    >
+                                        <Check
+                                            className={cn(
+                                                'mr-2 h-4 w-4',
+                                                activeOrg?.org_id === org.org_id
+                                                    ? 'opacity-100'
+                                                    : 'opacity-0'
+                                            )}
+                                        />
+                                        {org.org_name}
+                                    </CommandItem>
+                                ))}
+                            </CommandGroup>
+                        </Command>
+                    </PopoverContent>
+                </Popover>
+            </div>
+        </div>
+    );
+}
+
+export default OrgSelector;
