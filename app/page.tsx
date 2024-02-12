@@ -1,5 +1,6 @@
 import { getUserOnServer } from "@/utils/supabase/user";
 import { getOrgsForUser } from "@/utils/supabase/orgs";
+import CreateOrg from "@/components/CreateOrg";
 
 export default async function Index() {
   const user = await getUserOnServer();
@@ -20,7 +21,10 @@ export default async function Index() {
               alt='victory-hand'
             />
           </h2>
-          <h3 className='text-2xl text-zinc-500'>Let's create</h3>
+          {
+            // If the user has no organizations, show a message
+            orgs.length === 0 && <CreateOrg userId={user.id} />
+          }
           {orgs.map((orgs) => {
             return <div key={orgs.org_id}>{orgs.org_name}</div>;
           })}
