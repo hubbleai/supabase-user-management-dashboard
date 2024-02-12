@@ -12,6 +12,5 @@ export const getUserOnClient = async () => {
     data: { user },
   } = await supabase.auth.getUser();
 
-  console.log("supabase", user);
   return user;
 };

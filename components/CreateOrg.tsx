@@ -3,8 +3,11 @@
 import React from "react";
 import { createClient as createBrowserClient } from "@/utils/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import { useOrgsStore } from "@/store/useOrgsStore";
 
 export default function CreateOrg(props: { userId: string }) {
+  const { orgs } = useOrgsStore();
+
   const { toast } = useToast();
   // create a new organization
   const createOrganization = async (orgName: string, userId: string) => {
@@ -98,21 +101,28 @@ export default function CreateOrg(props: { userId: string }) {
     await createAdminRoleForNewOrg(props.userId);
   };
 
+  if (orgs.length > 0) {
+    return null;
+  }
+
   return (
-    <div className='flex flex-col items-start'>
-      <h3 className='text-2xl text-zinc-500'>
-        Add your company name to get started!
+    <div className='flex flex-col border border-zinc-200 shadow-md p-5 rounded-lg mx-auto w-full max-w-lg mt-10'>
+      <h3 className='text-xl text-zinc-600 font-bold leading-10'>
+        Name your organization
       </h3>
+      <h4 className='text-md text-zinc-500'>
+        You can change this later in settings.
+      </h4>
       <input
         type='text'
         placeholder='Maple St. Inc.'
-        className='border-b-2 text-xl placeholder:font-kalam border-zinc-300 p-2 my-4 focus:outline-none focus:border-zinc-900 transition-colors duration-300 ease-in-out'
+        className='border text-md bg-zinc-100 border-zinc-200 p-2 my-4 rounded-lg focus:outline-none focus:border-zinc-400 transition-colors duration-300 ease-in-out'
       />
       <button
         onClick={() => {
           handleOrgCreation("Maple St. Inc.");
         }}
-        className='bg-zinc-800 text-white px-4 py-2 my-4 hover:bg-zinc-950 transition-colors duration-300 ease-in-out'
+        className='bg-zinc-800 text-white rounded-lg px-4 py-2 my-4 hover:bg-zinc-950 transition-colors duration-300 ease-in-out'
       >
         Create Org
       </button>
