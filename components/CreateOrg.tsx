@@ -6,14 +6,20 @@ import { useToast } from '@/components/ui/use-toast';
 import { useOrgsStore } from '@/store/useOrgsStore';
 import { Status } from '@/types/common';
 import Loader from '@/components/ui/Loader';
+import { useRouter } from 'next/navigation';
 
 export default function CreateOrg(props: { userId: string }) {
+    // Global state
+    const { orgs, loading } = useOrgsStore();
+
+    // Local state
     const [orgName, setOrgName] = useState('');
     const [status, setStatus] = useState(Status.Idle);
 
-    const { orgs } = useOrgsStore();
-
+    // utitlity hooks
     const { toast } = useToast();
+    const router = useRouter();
+
     // create a new organization
     const createOrganization = async (orgName: string, userId: string) => {
         const supabase = createBrowserClient();
@@ -110,7 +116,16 @@ export default function CreateOrg(props: { userId: string }) {
         await createOrganization(orgName, props.userId);
         await createAdminRoleForNewOrg(props.userId);
         setStatus(Status.Success);
+        router.push('/?orgCreated=true');
     };
+
+    if (loading) {
+        return (
+            <div className="mt-10 flex w-full items-center">
+                <Loader color="bg-zinc-200" className="mx-auto" />
+            </div>
+        );
+    }
 
     if (orgs.length > 0) {
         return null;
