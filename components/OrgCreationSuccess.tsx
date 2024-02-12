@@ -11,6 +11,10 @@ function OrgCreationSuccess() {
 
     const search = searchParams.get('orgCreated');
 
+    if (!org) {
+        return null;
+    }
+
     if (search === 'true') {
         return (
             <div className="my-10 flex flex-col rounded-xl bg-[#506385] px-10 py-5 font-mono text-white">
