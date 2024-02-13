@@ -126,10 +126,11 @@ export default function CreateOrg(props: { userId: string }) {
     return (
         <div className="mx-auto mt-10 flex w-full max-w-lg flex-col rounded-lg border border-zinc-200 p-5 shadow-md">
             <h3 className="text-xl font-bold leading-10 text-zinc-600">
-                Name your organization
+                Let's get you started
             </h3>
             <h4 className="text-md text-zinc-500">
-                You can change this later in settings.
+                Write display name of your organization. You can change this
+                later in settings.
             </h4>
             <input
                 type="text"

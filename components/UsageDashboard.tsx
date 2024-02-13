@@ -1,7 +1,7 @@
 import React from 'react';
 
 function UsageDashboard() {
-    return <div>UsageDashboard</div>;
+    return <div></div>;
 }
 
 export default UsageDashboard;

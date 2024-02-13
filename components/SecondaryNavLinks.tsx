@@ -1,5 +1,6 @@
 'use client';
 
+import { useOrgsStore } from '@/store/useOrgsStore';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';
@@ -32,6 +33,9 @@ function NavLink({
 
 function SecondaryNavLinks() {
     const pathname = usePathname();
+    const { activeOrg } = useOrgsStore();
+
+    if (!activeOrg) return null;
 
     return (
         <div className="mt-5 flex w-full border-b border-b-foreground/10">
