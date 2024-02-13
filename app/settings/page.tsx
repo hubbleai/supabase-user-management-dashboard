@@ -1,7 +1,12 @@
+import UserInvite from '@/components/UserInvite';
 import React from 'react';
 
 function Settings() {
-    return <div className="">You can configure your company here soon.</div>;
+    return (
+        <div className="flex w-full">
+            <UserInvite />
+        </div>
+    );
 }
 
 export default Settings;

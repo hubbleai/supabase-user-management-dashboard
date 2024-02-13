@@ -1,7 +1,6 @@
 import { getUserOnServer } from '@/utils/supabase/user';
 import CreateOrg from '@/components/CreateOrg';
 import OrgCreationSuccess from '@/components/OrgCreationSuccess';
-import UserInvite from '@/components/UserInvite';
 import UsageDashboard from '@/components/UsageDashboard';
 
 export default async function Index() {
@@ -11,12 +10,9 @@ export default async function Index() {
 
     return (
         <div className="flex w-full flex-1 flex-col items-center">
-            <div className="w-full max-w-4xl px-3 opacity-0 animate-in">
-                <CreateOrg userId={user.id} />
-                <OrgCreationSuccess />
-                <UserInvite />
-                <UsageDashboard />
-            </div>
+            <CreateOrg userId={user.id} />
+            <OrgCreationSuccess />
+            <UsageDashboard />
         </div>
     );
 }
