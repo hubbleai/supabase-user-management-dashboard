@@ -41,13 +41,18 @@ function OrgSelector() {
                 <Popover open={open} onOpenChange={setOpen}>
                     <PopoverTrigger asChild>
                         <Button
-                            variant="outline"
+                            variant="ghost"
                             role="combobox"
                             aria-expanded={open}
                             className="w-[200px] justify-between"
                         >
                             {activeOrg?.org_name ?? 'No Org Found'}
-                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            <div className="flex items-center">
+                                <p className="rounded-full bg-zinc-200 px-2 py-[3px] text-xs text-zinc-600">
+                                    Pro
+                                </p>
+                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </div>
                         </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-[200px] p-0">
