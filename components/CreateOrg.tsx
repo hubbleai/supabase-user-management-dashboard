@@ -119,15 +119,7 @@ export default function CreateOrg(props: { userId: string }) {
         router.push('/?orgCreated=true');
     };
 
-    if (loading) {
-        return (
-            <div className="mt-10 flex w-full items-center">
-                <Loader color="bg-zinc-200" className="mx-auto" />
-            </div>
-        );
-    }
-
-    if (orgs.length > 0) {
+    if (orgs.length > 0 || loading) {
         return null;
     }
 
