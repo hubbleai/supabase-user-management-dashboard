@@ -40,7 +40,7 @@ const UserInvite = () => {
         if (validInvites.length !== invites.length) {
             toast({
                 description:
-                    'One or more emails are invalid. Please correct them before sending.',
+                    'One or more emails are invalid. Please correct them before creating invites.',
             });
             setLoading(false);
             return;
@@ -57,9 +57,13 @@ const UserInvite = () => {
         );
 
         if (error) {
-            toast({ description: 'Failed to send invites.' });
+            toast({ description: 'Failed to create invites.' });
         } else {
-            toast({ description: 'Invites sent successfully.' });
+            toast({
+                title: 'Invites created successfully.',
+
+                description: 'Invited users can now login.',
+            });
             setInvites([{ recipient_email: '', role_id: RoleId.member }]); // Reset form
         }
         setLoading(false);
@@ -136,7 +140,7 @@ const UserInvite = () => {
                     className="flex items-center justify-center self-end rounded-lg bg-zinc-900 px-4 py-2 text-white hover:bg-zinc-800 disabled:bg-zinc-400"
                 >
                     {loading && <Loader color="bg-zinc-200" className="mr-2" />}
-                    {loading ? 'Sending Invites...' : 'Send Invites'}
+                    {loading ? 'Creating Invites...' : 'Create Invites'}
                 </button>
             </div>
         </div>
