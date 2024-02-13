@@ -1,6 +1,8 @@
 import { getUserOnServer } from '@/utils/supabase/user';
 import CreateOrg from '@/components/CreateOrg';
 import OrgCreationSuccess from '@/components/OrgCreationSuccess';
+import UserInvite from '@/components/UserInvite';
+import UsageDashboard from '@/components/UsageDashboard';
 
 export default async function Index() {
     const user = await getUserOnServer();
@@ -12,6 +14,8 @@ export default async function Index() {
             <div className="w-full max-w-4xl px-3 opacity-0 animate-in">
                 <CreateOrg userId={user.id} />
                 <OrgCreationSuccess />
+                <UserInvite />
+                <UsageDashboard />
             </div>
         </div>
     );
