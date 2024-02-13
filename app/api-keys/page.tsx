@@ -1,6 +1,9 @@
+import { authenticatePage } from '@/utils/auth';
 import React from 'react';
 
-function APIKeys() {
+async function APIKeys() {
+    await authenticatePage();
+
     return <div className="">Manage API keys</div>;
 }
 

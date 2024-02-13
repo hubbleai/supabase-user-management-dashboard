@@ -1,7 +1,10 @@
 import UserInvite from '@/components/UserInvite';
+import { authenticatePage } from '@/utils/auth';
 import React from 'react';
 
-function Settings() {
+async function Settings() {
+    await authenticatePage();
+
     return (
         <div className="flex w-full">
             <UserInvite />

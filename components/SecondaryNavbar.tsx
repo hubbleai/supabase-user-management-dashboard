@@ -1,12 +1,11 @@
 import React from 'react';
 import { getUserOnServer } from '@/utils/supabase/user';
-import Link from 'next/link';
 import SecondaryNavLinks from './SecondaryNavLinks';
 
 async function SecondaryNavbar() {
     const user = await getUserOnServer();
 
-    if (!user) return <div>Error fetching user.</div>;
+    if (!user) return null;
 
     return (
         <div className="flex w-full flex-col items-center">
