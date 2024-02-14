@@ -1,9 +1,11 @@
-import React from 'react';
-import { getUserOnServer } from '@/utils/supabase/user';
-import SecondaryNavLinks from './SecondaryNavLinks';
+'use client';
 
-async function SecondaryNavbar() {
-    const user = await getUserOnServer();
+import React from 'react';
+import SecondaryNavLinks from './SecondaryNavLinks';
+import { useAuthStore } from '@/store/useAuthStore';
+
+function SecondaryNavbar() {
+    const { user, loading } = useAuthStore();
 
     if (!user) return null;
 

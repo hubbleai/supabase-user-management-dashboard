@@ -1,40 +1,47 @@
-import { headers, cookies } from 'next/headers';
-import { createClient } from '@/utils/supabase/server';
-import { redirect } from 'next/navigation';
+'use client';
 
-export default function Login({
-    searchParams,
-}: {
-    searchParams: { message: string };
-}) {
-    const signIn = async (formData: FormData) => {
-        'use server';
+import { useState } from 'react';
+import { createClient } from '@/utils/supabase/client';
+import { AlertCircle } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useAuthStore } from '@/store/useAuthStore';
+import Loader from '@/components/ui/Loader';
 
-        const email = formData.get('email') as string;
-        const password = formData.get('password') as string;
-        const cookieStore = cookies();
-        const supabase = createClient(cookieStore);
+const supabase = createClient();
 
+enum AuthState {
+    Idle = 'IDLE',
+    SigningIn = 'SIGNING_IN',
+    SigningUp = 'SIGNING_UP',
+}
+
+export default function Login() {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const message = searchParams.get('message');
+    const [authState, setAuthState] = useState(AuthState.Idle);
+
+    const { user, loading } = useAuthStore();
+
+    const signIn = async () => {
+        setAuthState(AuthState.SigningIn);
         const { error } = await supabase.auth.signInWithPassword({
             email,
             password,
         });
 
         if (error) {
-            return redirect('/login?message=Could not authenticate user');
+            setAuthState(AuthState.Idle);
+            return router.push('/login?message=Could not authenticate user');
         }
-
-        return redirect('/');
+        return router.push('/');
     };
 
-    const signUp = async (formData: FormData) => {
-        'use server';
-
-        const origin = headers().get('origin');
-        const email = formData.get('email') as string;
-        const password = formData.get('password') as string;
-        const cookieStore = cookies();
-        const supabase = createClient(cookieStore);
+    const signUp = async () => {
+        setAuthState(AuthState.SigningUp);
+        const origin = window.location.origin;
 
         const { error } = await supabase.auth.signUp({
             email,
@@ -45,20 +52,31 @@ export default function Login({
         });
 
         if (error) {
-            return redirect('/login?message=Could not authenticate user');
+            setAuthState(AuthState.Idle);
+            return router.push('/login?message=Could not authenticate user');
         }
 
-        return redirect(
+        setAuthState(AuthState.Idle);
+        return router.push(
             '/login?message=Check email to continue sign in process'
         );
     };
 
+    if (loading) {
+        return (
+            <div className="mx-auto mt-10 flex w-full items-center justify-center">
+                <Loader />
+            </div>
+        );
+    }
+
+    if (user) {
+        router.push('/');
+    }
+
     return (
         <div className="mx-auto mt-10 flex w-full flex-1 flex-col justify-center gap-2 px-8 sm:max-w-md">
-            <form
-                className="flex w-full flex-1 flex-col justify-center gap-2 text-foreground animate-in"
-                action={signIn}
-            >
+            <div className="flex w-full flex-1 flex-col justify-center gap-2 text-foreground animate-in">
                 <label className="text-md" htmlFor="email">
                     Email
                 </label>
@@ -66,6 +84,8 @@ export default function Login({
                     className="mb-6 rounded-md border bg-inherit px-4 py-2"
                     name="email"
                     placeholder="you@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     required
                 />
                 <label className="text-md" htmlFor="password">
@@ -76,23 +96,36 @@ export default function Login({
                     type="password"
                     name="password"
                     placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     required
                 />
-                <button className="mb-2 rounded-md bg-zinc-800 px-4 py-2 text-white">
-                    Sign In
+                <button
+                    type="button"
+                    onClick={signIn}
+                    disabled={authState !== AuthState.Idle}
+                    className="mb-2 rounded-md bg-zinc-800 px-4 py-2 text-white"
+                >
+                    {authState === AuthState.SigningIn
+                        ? 'Signing In...'
+                        : 'Sign In'}
                 </button>
                 <button
-                    formAction={signUp}
+                    type="button"
+                    onClick={signUp}
+                    disabled={authState !== AuthState.Idle}
                     className="mb-2 rounded-md border border-foreground/20 px-4 py-2 text-foreground"
                 >
-                    Sign Up
+                    {authState === AuthState.SigningUp
+                        ? 'Signing Up...'
+                        : 'Sign Up'}
                 </button>
-                {searchParams?.message && (
-                    <p className="mt-4 bg-foreground/10 p-4 text-center text-foreground">
-                        {searchParams.message}
+                {message && (
+                    <p className="my-4 rounded-md border border-zinc-300 bg-zinc-100 p-4 text-zinc-700">
+                        <AlertCircle className="mr-2 inline-flex" /> {message}
                     </p>
                 )}
-            </form>
+            </div>
         </div>
     );
 }

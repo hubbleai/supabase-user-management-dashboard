@@ -1,4 +1,6 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+'use client';
+
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -7,31 +9,24 @@ import {
     DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuSeparator,
-    DropdownMenuShortcut,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-import { createClient } from '@/utils/supabase/server';
-import Link from 'next/link';
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
+import { createClient } from '@/utils/supabase/client';
+import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/store/useAuthStore';
 
-export default async function UserNav() {
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
+const supabase = createClient();
 
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
+export default function UserNav() {
+    const router = useRouter();
 
     const signOut = async () => {
-        'use server';
-
-        const cookieStore = cookies();
-        const supabase = createClient(cookieStore);
         await supabase.auth.signOut();
-        return redirect('/login');
+        router.push('/login');
     };
+
+    const { user } = useAuthStore();
 
     if (!user) {
         return null;
@@ -68,9 +63,9 @@ export default async function UserNav() {
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                    <form action={signOut} className="flex flex-1">
-                        <button className="w-full text-start">Log out</button>
-                    </form>
+                    <button onClick={signOut} className="w-full text-start">
+                        Log out
+                    </button>
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
