@@ -3,10 +3,12 @@
 import React from 'react';
 import SecondaryNavLinks from './SecondaryNavLinks';
 import { useAuthStore } from '@/store/useAuthStore';
+import { useOrgsStore } from '@/store/useOrgsStore';
 
 function SecondaryNavbar() {
-    const { user, loading } = useAuthStore();
+    const { user } = useAuthStore();
 
+    const { activeOrg } = useOrgsStore();
     if (!user) return null;
 
     return (
@@ -22,7 +24,15 @@ function SecondaryNavbar() {
                             alt="victory-hand"
                         />
                     </h2>
-                    <h3 className="text-2xl text-zinc-500">Welcome Back.</h3>
+                    {activeOrg ? (
+                        <h3 className="text-2xl text-zinc-500">
+                            Welcome Back.
+                        </h3>
+                    ) : (
+                        <h3 className="text-2xl text-zinc-500">
+                            Let's get you started!
+                        </h3>
+                    )}
                     <SecondaryNavLinks />
                 </main>
             </div>
