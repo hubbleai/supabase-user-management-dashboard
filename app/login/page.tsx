@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { AlertCircle } from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
 import Loader from '@/components/ui/Loader';
-import { Suspense } from 'react';
 
 const supabase = createClient();
 
@@ -18,10 +18,8 @@ enum AuthState {
 
 export default function Login() {
     const router = useRouter();
-    const searchParams = useSearchParams();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const message = searchParams.get('message');
     const [authState, setAuthState] = useState(AuthState.Idle);
 
     const { user, loading } = useAuthStore();
@@ -70,69 +68,108 @@ export default function Login() {
 
     if (loading) {
         return (
-            <Suspense>
-                <div className="mx-auto mt-10 flex w-full items-center justify-center">
-                    <Loader />
-                </div>
-            </Suspense>
+            <div className="mx-auto mt-10 flex w-full items-center justify-center">
+                <Loader />
+            </div>
         );
     }
 
     return (
-        <Suspense>
+        <Suspense fallback={<div>Loading...</div>}>
             <div className="mx-auto mt-10 flex w-full flex-1 flex-col justify-center gap-2 px-8 sm:max-w-md">
-                <div className="flex w-full flex-1 flex-col justify-center gap-2 text-foreground animate-in">
-                    <label className="text-md" htmlFor="email">
-                        Email
-                    </label>
-                    <input
-                        className="mb-6 rounded-md border bg-inherit px-4 py-2"
-                        name="email"
-                        placeholder="you@example.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                    <label className="text-md" htmlFor="password">
-                        Password
-                    </label>
-                    <input
-                        className="mb-6 rounded-md border bg-inherit px-4 py-2"
-                        type="password"
-                        name="password"
-                        placeholder="••••••••"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                    <button
-                        type="button"
-                        onClick={signIn}
-                        disabled={authState !== AuthState.Idle}
-                        className="mb-2 rounded-md bg-zinc-800 px-4 py-2 text-white"
-                    >
-                        {authState === AuthState.SigningIn
-                            ? 'Signing In...'
-                            : 'Sign In'}
-                    </button>
-                    <button
-                        type="button"
-                        onClick={signUp}
-                        disabled={authState !== AuthState.Idle}
-                        className="mb-2 rounded-md border border-foreground/20 px-4 py-2 text-foreground"
-                    >
-                        {authState === AuthState.SigningUp
-                            ? 'Signing Up...'
-                            : 'Sign Up'}
-                    </button>
-                    {message && (
-                        <p className="my-4 rounded-md border border-zinc-300 bg-zinc-100 p-4 text-zinc-700">
-                            <AlertCircle className="mr-2 inline-flex" />{' '}
-                            {message}
-                        </p>
-                    )}
-                </div>
+                {/* Suspense wrapper added for useSearchParams */}
+                <Suspense fallback={<div>Loading...</div>}>
+                    <SearchParamsComponent />
+                </Suspense>
+                <AuthFormComponent
+                    email={email}
+                    setEmail={setEmail}
+                    password={password}
+                    setPassword={setPassword}
+                    authState={authState}
+                    setAuthState={setAuthState}
+                    signIn={signIn}
+                    signUp={signUp}
+                />
             </div>
         </Suspense>
+    );
+}
+
+function SearchParamsComponent() {
+    const searchParams = useSearchParams();
+    const message = searchParams.get('message');
+    return message ? (
+        <p className="my-4 rounded-md border border-zinc-300 bg-zinc-100 p-4 text-zinc-700">
+            <AlertCircle className="mr-2 inline-flex" /> {message}
+        </p>
+    ) : null;
+}
+
+function AuthFormComponent({
+    email,
+    setEmail,
+    password,
+    setPassword,
+    authState,
+    setAuthState,
+    signIn,
+    signUp,
+}: {
+    email: string;
+    setEmail: (email: string) => void;
+    password: string;
+    setPassword: (password: string) => void;
+    authState: AuthState;
+    setAuthState: (authState: AuthState) => void;
+    signIn: () => Promise<void>;
+    signUp: () => Promise<void>;
+}) {
+    return (
+        <>
+            <label className="text-md" htmlFor="email">
+                Email
+            </label>
+            <input
+                className="mb-6 rounded-md border bg-inherit px-4 py-2"
+                name="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+            />
+            <label className="text-md" htmlFor="password">
+                Password
+            </label>
+            <input
+                className="mb-6 rounded-md border bg-inherit px-4 py-2"
+                type="password"
+                name="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+            />
+            <button
+                type="button"
+                onClick={signIn}
+                disabled={authState !== AuthState.Idle}
+                className="mb-2 rounded-md bg-zinc-800 px-4 py-2 text-white"
+            >
+                {authState === AuthState.SigningIn
+                    ? 'Signing In...'
+                    : 'Sign In'}
+            </button>
+            <button
+                type="button"
+                onClick={signUp}
+                disabled={authState !== AuthState.Idle}
+                className="mb-2 rounded-md border border-foreground/20 px-4 py-2 text-foreground"
+            >
+                {authState === AuthState.SigningUp
+                    ? 'Signing Up...'
+                    : 'Sign Up'}
+            </button>
+        </>
     );
 }
