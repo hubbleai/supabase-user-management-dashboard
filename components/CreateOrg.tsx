@@ -7,6 +7,8 @@ import { useOrgsStore } from '@/store/useOrgsStore';
 import { Status } from '@/types/common';
 import Loader from '@/components/ui/Loader';
 import { useRouter } from 'next/navigation';
+import { MoveRight } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function CreateOrg(props: { userId: string }) {
     // Global state
@@ -125,8 +127,8 @@ export default function CreateOrg(props: { userId: string }) {
 
     return (
         <div className="mx-auto mt-10 flex w-full max-w-lg flex-col rounded-lg border border-zinc-200 p-5 shadow-md">
-            <h3 className="text-xl font-bold leading-10 text-zinc-600">
-                Let's get you started
+            <h3 className="text-xl font-semibold leading-10 text-zinc-700">
+                Create an Organization
             </h3>
             <h4 className="text-md text-zinc-500">
                 Write display name of your organization. You can change this
@@ -142,15 +144,23 @@ export default function CreateOrg(props: { userId: string }) {
             />
             <button
                 onClick={() => {
+                    if (loading) return;
                     handleOrgCreation(orgName);
                 }}
                 disabled={!orgName}
-                className="my-4 flex items-center justify-center rounded-lg border bg-zinc-900 px-4 py-2 text-white transition-colors duration-300 ease-in-out hover:bg-zinc-950 disabled:cursor-not-allowed  disabled:border-zinc-300 disabled:bg-zinc-100 disabled:text-zinc-400"
+                className="my-4 flex items-center justify-center rounded-lg border bg-zinc-900 px-4 py-2 text-white transition-colors duration-300 ease-in-out hover:bg-zinc-950 disabled:cursor-not-allowed"
             >
                 {status === Status.Loading && (
                     <Loader color="bg-zinc-200" className="mr-2" />
                 )}
                 Create Org
+                <motion.div
+                    animate={{ opacity: orgName ? 1 : 0, x: orgName ? 0 : -10 }}
+                    transition={{ duration: 0.2, ease: 'easeInOut' }}
+                    className="ml-2"
+                >
+                    <MoveRight />
+                </motion.div>
             </button>
         </div>
     );
