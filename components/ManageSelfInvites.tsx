@@ -100,6 +100,10 @@ function ManageSelfInvites() {
         });
     };
 
+    if (!filteredInvites.length) {
+        return null;
+    }
+
     return (
         <div className="mx-auto mt-10 flex w-full max-w-lg flex-col rounded-lg border border-zinc-200 p-5 shadow-md">
             <h3 className="text-xl font-semibold leading-10 text-zinc-700">

@@ -14,8 +14,8 @@ export default async function Index() {
         <div className="flex w-full flex-1 flex-col items-center">
             <CreateOrg userId={user.id} />
             <OrgCreationSuccess />
-            <UsageDashboard />
             <ManageSelfInvites />
+            <UsageDashboard />
         </div>
     );
 }
