@@ -2,6 +2,7 @@
 
 import { useAPIKeysStore } from '@/store/useAPIKeysStore';
 import React from 'react';
+import CreateAPIKeys from '@/components/CreateAPIKeys';
 
 // function that returns strings in a hidden format: "[first two]********[last two readable]"
 const hideString = (str: string) => {
@@ -18,6 +19,7 @@ function ManageAPIKeys() {
         <div className="w-full">
             <h1 className="font-semibold">Manage API Keys</h1>
             <h1 className="mb-5"> Create or manage your API keys here.</h1>
+            <CreateAPIKeys />
             <div className="font-regular grid grid-cols-3 text-sm text-zinc-500">
                 <div>Label</div>
                 <div>Secret</div>
