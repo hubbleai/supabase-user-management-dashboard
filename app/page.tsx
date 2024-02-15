@@ -3,6 +3,7 @@ import CreateOrg from '@/components/CreateOrg';
 import OrgCreationSuccess from '@/components/OrgCreationSuccess';
 import UsageDashboard from '@/components/UsageDashboard';
 import { redirect } from 'next/navigation';
+import ManageSelfInvites from '@/components/ManageSelfInvites';
 
 export default async function Index() {
     const user = await getUserOnServer();
@@ -14,6 +15,7 @@ export default async function Index() {
             <CreateOrg userId={user.id} />
             <OrgCreationSuccess />
             <UsageDashboard />
+            <ManageSelfInvites />
         </div>
     );
 }

@@ -17,6 +17,7 @@ export interface Invite {
     invite_id: string; // UUID
     recipient_email: string;
     org_id: string; // UUID
+    org_name?: string; // set by server
     role_id: string;
     status: InviteStatus;
     created_at: Date;

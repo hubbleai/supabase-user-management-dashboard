@@ -52,6 +52,7 @@ const UserInvite = () => {
                 recipient_email: invite.recipient_email,
                 role_id: invite.role_id,
                 org_id: activeOrg?.org_id,
+                org_name: activeOrg?.org_name,
                 status: InviteStatus.Pending,
             }))
         );
