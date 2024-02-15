@@ -28,7 +28,7 @@ Tech Stack:
 1. **Clone the repository**
 
     ```bash
-    git clone https://github.com/your-github/carbon-customer-portal.git
+    git clone git@github.com:toughyear/supabase-user-management-dashboard.git
     cd carbon-customer-portal
     ```
 
