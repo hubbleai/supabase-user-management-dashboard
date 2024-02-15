@@ -52,4 +52,5 @@ export interface APIKey {
     org_id: string; // UUID
     is_active: boolean;
     created_at: Date;
+    label?: string;
 }

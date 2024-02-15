@@ -1,3 +1,4 @@
+import ManageAPIKeys from '@/components/ManageAPIKeys';
 import { authenticatePage } from '@/utils/auth';
 import React from 'react';
 
@@ -5,8 +6,8 @@ async function APIKeys() {
     await authenticatePage();
 
     return (
-        <div className="flex min-h-48 items-center justify-center">
-            Manage API keys
+        <div className="my-10 flex w-full items-center justify-center">
+            <ManageAPIKeys />
         </div>
     );
 }
