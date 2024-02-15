@@ -6,6 +6,7 @@ import { AlertCircle } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
 import Loader from '@/components/ui/Loader';
+import { Suspense } from 'react';
 
 const supabase = createClient();
 
@@ -75,57 +76,60 @@ export default function Login() {
     }
 
     return (
-        <div className="mx-auto mt-10 flex w-full flex-1 flex-col justify-center gap-2 px-8 sm:max-w-md">
-            <div className="flex w-full flex-1 flex-col justify-center gap-2 text-foreground animate-in">
-                <label className="text-md" htmlFor="email">
-                    Email
-                </label>
-                <input
-                    className="mb-6 rounded-md border bg-inherit px-4 py-2"
-                    name="email"
-                    placeholder="you@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                />
-                <label className="text-md" htmlFor="password">
-                    Password
-                </label>
-                <input
-                    className="mb-6 rounded-md border bg-inherit px-4 py-2"
-                    type="password"
-                    name="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
-                <button
-                    type="button"
-                    onClick={signIn}
-                    disabled={authState !== AuthState.Idle}
-                    className="mb-2 rounded-md bg-zinc-800 px-4 py-2 text-white"
-                >
-                    {authState === AuthState.SigningIn
-                        ? 'Signing In...'
-                        : 'Sign In'}
-                </button>
-                <button
-                    type="button"
-                    onClick={signUp}
-                    disabled={authState !== AuthState.Idle}
-                    className="mb-2 rounded-md border border-foreground/20 px-4 py-2 text-foreground"
-                >
-                    {authState === AuthState.SigningUp
-                        ? 'Signing Up...'
-                        : 'Sign Up'}
-                </button>
-                {message && (
-                    <p className="my-4 rounded-md border border-zinc-300 bg-zinc-100 p-4 text-zinc-700">
-                        <AlertCircle className="mr-2 inline-flex" /> {message}
-                    </p>
-                )}
+        <Suspense>
+            <div className="mx-auto mt-10 flex w-full flex-1 flex-col justify-center gap-2 px-8 sm:max-w-md">
+                <div className="flex w-full flex-1 flex-col justify-center gap-2 text-foreground animate-in">
+                    <label className="text-md" htmlFor="email">
+                        Email
+                    </label>
+                    <input
+                        className="mb-6 rounded-md border bg-inherit px-4 py-2"
+                        name="email"
+                        placeholder="you@example.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                    <label className="text-md" htmlFor="password">
+                        Password
+                    </label>
+                    <input
+                        className="mb-6 rounded-md border bg-inherit px-4 py-2"
+                        type="password"
+                        name="password"
+                        placeholder="••••••••"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                    <button
+                        type="button"
+                        onClick={signIn}
+                        disabled={authState !== AuthState.Idle}
+                        className="mb-2 rounded-md bg-zinc-800 px-4 py-2 text-white"
+                    >
+                        {authState === AuthState.SigningIn
+                            ? 'Signing In...'
+                            : 'Sign In'}
+                    </button>
+                    <button
+                        type="button"
+                        onClick={signUp}
+                        disabled={authState !== AuthState.Idle}
+                        className="mb-2 rounded-md border border-foreground/20 px-4 py-2 text-foreground"
+                    >
+                        {authState === AuthState.SigningUp
+                            ? 'Signing Up...'
+                            : 'Sign Up'}
+                    </button>
+                    {message && (
+                        <p className="my-4 rounded-md border border-zinc-300 bg-zinc-100 p-4 text-zinc-700">
+                            <AlertCircle className="mr-2 inline-flex" />{' '}
+                            {message}
+                        </p>
+                    )}
+                </div>
             </div>
-        </div>
+        </Suspense>
     );
 }
