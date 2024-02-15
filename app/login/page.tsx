@@ -63,16 +63,19 @@ export default function Login() {
         );
     };
 
-    if (loading) {
-        return (
-            <div className="mx-auto mt-10 flex w-full items-center justify-center">
-                <Loader />
-            </div>
-        );
-    }
-
     if (user) {
         router.push('/');
+        return null;
+    }
+
+    if (loading) {
+        return (
+            <Suspense>
+                <div className="mx-auto mt-10 flex w-full items-center justify-center">
+                    <Loader />
+                </div>
+            </Suspense>
+        );
     }
 
     return (
