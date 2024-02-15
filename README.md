@@ -1,93 +1,107 @@
-<a href="https://demo-nextjs-with-supabase.vercel.app/">
-  <img alt="Next.js and Supabase Starter Kit - the fastest way to build apps with Next.js and Supabase" src="https://demo-nextjs-with-supabase.vercel.app/opengraph-image.png">
-  <h1 align="center">Next.js and Supabase Starter Kit</h1>
-</a>
+# User Management Dashboard
 
-<p align="center">
- The fastest way to build apps with Next.js and Supabase
-</p>
+This is a sample project that allwos users management of organizational roles, API key distribution, and more, with a robust authentication system powered by Supabase.
 
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#demo"><strong>Demo</strong></a> ·
-  <a href="#deploy-to-vercel"><strong>Deploy to Vercel</strong></a> ·
-  <a href="#clone-and-run-locally"><strong>Clone and run locally</strong></a> ·
-  <a href="#feedback-and-issues"><strong>Feedback and issues</strong></a>
-  <a href="#more-supabase-examples"><strong>More Examples</strong></a>
-</p>
-<br/>
+Tech Stack:
+
+-   Supabase
+-   Next.js
+-   TailwindCSS
 
 ## Features
 
-- Works across the entire [Next.js](https://nextjs.org) stack
-  - App Router
-  - Pages Router
-  - Middleware
-  - Client
-  - Server
-  - It just works!
-- supabase-ssr. A package to configure Supabase Auth to use cookies
-- Styling with [Tailwind CSS](https://tailwindcss.com)
-- Optional deployment with [Supabase Vercel Integration and Vercel deploy](#deploy-your-own)
-  - Environment variables automatically assigned to Vercel project
+-   **Supabase Authentication**: Secure and straightforward user authentication.
+-   **Database Management**: Utilize Supabase for backend operations including database management with Row Level Security (RLS).
+-   **Authorization and Access Control**: Relies on Supabase's RLS policies to guarantee authorized access to data.
+-   **Dynamic UI with TailwindCSS and shadCN UI**: Build responsive and modern user interfaces.
+-   **Comprehensive Role Management**: Efficiently manage user roles within organizations which can be extended to have granular access control.
 
-## Demo
+## Getting Started
 
-You can view a fully working demo at [demo-nextjs-with-supabase.vercel.app](https://demo-nextjs-with-supabase.vercel.app/).
+### Prerequisites
 
-## Deploy to Vercel
+-   Node.js installed on your system.
+-   A Supabase account and project for backend services.
 
-Vercel deployment will guide you through creating a Supabase account and project.
+### Setup
 
-After installation of the Supabase integration, all relevant environment variables will be assigned to the project so the deployment is fully functioning.
+1. **Clone the repository**
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&project-name=nextjs-with-supabase&repository-name=nextjs-with-supabase&demo-title=nextjs-with-supabase&demo-description=This%20starter%20configures%20Supabase%20Auth%20to%20use%20cookies%2C%20making%20the%20user's%20session%20available%20throughout%20the%20entire%20Next.js%20app%20-%20Client%20Components%2C%20Server%20Components%2C%20Route%20Handlers%2C%20Server%20Actions%20and%20Middleware.&demo-url=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2F&external-id=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&demo-image=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2Fopengraph-image.png&integration-ids=oac_VqOgBHqhEoFTPzGkPd7L0iH6)
+    ```bash
+    git clone https://github.com/your-github/carbon-customer-portal.git
+    cd carbon-customer-portal
+    ```
 
-The above will also clone the Starter kit to your GitHub, you can clone that locally and develop locally.
+2. **Install dependencies**
 
-If you wish to just develop locally and not deploy to Vercel, [follow the steps below](#clone-and-run-locally).
+    ```bash
+    npm install
+    ```
 
-## Clone and run locally
+3. **Configure environment variables**
 
-1. You'll first need a Supabase project which can be made [via the Supabase dashboard](https://database.new)
+    Create a `.env.local` file at the root of your project and add the following lines:
 
-2. Create a Next.js app using the Supabase Starter template npx command
+    ```plaintext
+    NEXT_PUBLIC_SUPABASE_URL=YourSupabaseURL
+    NEXT_PUBLIC_SUPABASE_ANON_KEY=YourSupabaseAnonKey
+    ```
 
-   ```bash
-   npx create-next-app -e with-supabase
-   ```
+    Replace `YourSupabaseURL` and `YourSupabaseAnonKey` with your actual Supabase project details.
 
-3. Use `cd` to change into the app's directory
+4. **Database setup**
+   You can use the `supabase.sql` file to create the necessary tables and policies in your Supabase project. This is not added yet, but will be added soon. To understand the schema and operations, refer to the Database Schema and Operations section below.
 
-   ```bash
-   cd name-of-new-app
-   ```
+### Running the project
 
-4. Rename `.env.local.example` to `.env.local` and update the following:
+-   **Development mode**
 
-   ```
-   NEXT_PUBLIC_SUPABASE_URL=[INSERT SUPABASE PROJECT URL]
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=[INSERT SUPABASE PROJECT API ANON KEY]
-   ```
+    ```bash
+    npm run dev
+    ```
 
-   Both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` can be found in [your Supabase project's API settings](https://app.supabase.com/project/_/settings/api)
+-   **Production build**
 
-5. You can now run the Next.js local development server:
+    ```bash
+    npm run build
+    npm start
+    ```
 
-   ```bash
-   npm run dev
-   ```
+## Code Structure
 
-   The starter kit should now be running on [localhost:3000](http://localhost:3000/).
+-   **App**: Project relies on the latest `app` directory paradigm of Nextjs to create file-based routing.
+-   **Components**: Reusable UI components are located in the `components` directory. This is where we install ShadCN UI components to inside the `components/ui` directory.
+-   **Utils**: The `utils` directory contains utility functions and custom hooks for interacting with Supabase and handling application auth logic.
+-   **Types**: The `types` directory contains custom TypeScript types and interfaces used throughout the project such as `User`, `Organization`, `Role`, that come from the DB schema.
+-   **Stores**: The `stores` directory contains the global state management using Zustand.
+-   **Hooks**: The `hooks` directory contains custom hooks for handling global state and other UI logic. Some hooks sync the DB data with the global state to always have the latest data.
 
-> Check out [the docs for Local Development](https://supabase.com/docs/guides/getting-started/local-development) to also run Supabase locally.
+## Database Schema and Operations
 
-## Feedback and issues
+### Schema Overview
 
-Please file feedback and issues over on the [Supabase GitHub org](https://github.com/supabase/supabase/issues/new/choose).
+-   **Organizations**: Track organizations with details including creation and admin information.
+-   **Roles**: Define user roles within organizations.
+-   **UserOrgRoles**: Associate users with organizations and their roles.
+-   **APIKeys**: Manage API keys for secure access to services.
+-   **Users**: Special table that comes from and managed by Supabase. Stores user details including email, name, and other information.
 
-## More Supabase examples
+### Workflow
 
-- [Next.js Subscription Payments Starter](https://github.com/vercel/nextjs-subscription-payments)
-- [Cookie-based Auth and the Next.js 13 App Router (free course)](https://youtube.com/playlist?list=PL5S4mPUpp4OtMhpnp93EFSo42iQ40XjbF)
-- [Supabase Auth and the Next.js App Router](https://github.com/supabase/supabase/tree/master/examples/auth/nextjs)
+1. **User Registration**: Utilizes Supabase Auth for secure signup and login.
+2. **Organization Management**: Users can create organizations, with entries automatically managed in the `Organizations` table.
+3. **Role Assignment**: Users are assigned roles within their organizations, facilitated by updates to the `UserOrgRoles` table.
+
+## UI Flow
+
+Guides the user through the process of logging in or signing up, joining or creating an organization, inviting other users, and managing API keys. The UI dynamically updates based on the user's interaction and organization's state.
+
+## Contribution
+
+We welcome contributions! Please read our CONTRIBUTING.md for guidelines on how to make this project better.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+---
