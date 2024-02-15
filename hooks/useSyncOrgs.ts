@@ -21,8 +21,11 @@ const useSyncOrgs = () => {
 
         if (orgs) {
             setOrgs(orgs);
-            if (!activeOrg) {
+            if (!activeOrg && orgs.length > 0) {
                 setActiveOrg(orgs[0]);
+            }
+            if (orgs.length === 0) {
+                setActiveOrg(null);
             }
             setLoading(false);
         }

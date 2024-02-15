@@ -8,7 +8,7 @@ interface OrgState {
     activeOrg: Organization | null;
     setOrgs: (orgs: Organization[]) => void;
     setLoading: (loading: boolean) => void;
-    setActiveOrg: (activeOrg: Organization) => void;
+    setActiveOrg: (activeOrg: Organization | null) => void;
 }
 
 export const useOrgsStore = create<OrgState>((set) => ({
@@ -17,5 +17,5 @@ export const useOrgsStore = create<OrgState>((set) => ({
     activeOrg: null,
     setOrgs: (orgs) => set({ orgs }),
     setLoading: (loading: boolean) => set({ loading }),
-    setActiveOrg: (activeOrg: Organization) => set({ activeOrg }),
+    setActiveOrg: (activeOrg: Organization | null) => set({ activeOrg }),
 }));
