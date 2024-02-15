@@ -36,7 +36,6 @@ const useSyncOrgs = () => {
 
         const authListener = supabase.auth.onAuthStateChange(
             (_event, _session) => {
-                console.log('Auth state changed', _event, _session);
                 fetchAndUpdateOrgs();
             }
         );

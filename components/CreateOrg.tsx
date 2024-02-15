@@ -9,10 +9,12 @@ import Loader from '@/components/ui/Loader';
 import { useRouter } from 'next/navigation';
 import { MoveRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useInvitesStore } from '@/store/useInvitesStore';
 
 export default function CreateOrg(props: { userId: string }) {
     // Global state
     const { orgs, loading } = useOrgsStore();
+    const { invites } = useInvitesStore();
 
     // Local state
     const [orgName, setOrgName] = useState('');
@@ -122,6 +124,10 @@ export default function CreateOrg(props: { userId: string }) {
     };
 
     if (orgs.length > 0 || loading) {
+        return null;
+    }
+
+    if (invites.length > 0) {
         return null;
     }
 
