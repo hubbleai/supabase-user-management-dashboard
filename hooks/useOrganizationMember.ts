@@ -1,6 +1,7 @@
 // import { useCallback, useEffect, useState } from "react";
 
 // TODO create interfaces for properties using any
+// TODO move these interfaces into a dedicated file
 export interface Organization {
     id: number;
     name: string;
@@ -16,7 +17,7 @@ export interface Organization {
     cancel_at_period_end?: boolean;
 }
 
-interface OrganizationMember {
+export interface OrganizationMember {
     id: number;
     email: string;
     first_name?: string;

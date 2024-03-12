@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -14,48 +13,66 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { createClient } from '@/utils/supabase/client';
 import { useAuthStore } from '@/store/useAuthStore';
-import { useOrgsStore } from '@/store/useOrgsStore';
 import { useToast } from '@/components/ui/use-toast';
 import Loader from '@/components/ui/Loader';
+import { OrganizationMember } from '@/hooks/useOrganizationMember';
 
-const supabase = createClient();
+// TODO move this interface into a dedicated file
+export interface APIKey {
+    id: number;
+    token_hash: string;
+    description?: string;
+    customer_id: number;
+    customer_email: string;
+    organization_id: number;
+    organization_name: string,
+    expires_at: Date,
+    created_at: Date,
+    updated_at: Date,
+}
 
-function CreateAPIKeys() {
+function CreateAPIKeys(props: { organizationMember: OrganizationMember }) {
     const [label, setLabel] = useState('My New Key');
     const [key, setKey] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const { user } = useAuthStore();
-    const { toast } = useToast();
-    const { activeOrg } = useOrgsStore();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-    const createAPIKey = async () => {
-        if (!label || !user || !activeOrg) return;
-        setIsLoading(true); // Start loading
-        const newKey = uuidv4();
-        const { error } = await supabase.from('api_keys').insert([
-            {
-                key: newKey,
-                label,
-                created_by: user.id,
-                org_id: activeOrg.org_id,
-            },
-        ]);
+    const { user } = useAuthStore();
+    const { toast } = useToast();
 
-        setIsLoading(false); // Stop loading
-        if (error) {
+    const createAPIKey = async () => {
+        if (!label || !user ) {
+            return;
+        }
+
+        setIsLoading(true);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/customer/api-key`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ 
+                user_id: props.organizationMember.id,
+                org_id: props.organizationMember.organization_id,
+                description: label,
+            }),
+        });
+
+        if (response.status !== 200) {
             toast({
                 description: 'API Key Creation Failed',
             });
         } else {
+            const newKey: APIKey = await response.json()
+
             toast({
                 description: 'New API Key Created',
             });
-            setKey(newKey);
+            setKey(newKey.token_hash);
             setIsDialogOpen(false); // Close the dialog on success
         }
+        setIsLoading(false);
     };
 
     return (

@@ -3,5 +3,8 @@ import { getUserOnServer } from './supabase/user';
 
 export const authenticatePage = async () => {
     const user = await getUserOnServer();
-    if (!user) return redirect('/login');
+    if (!user) {
+        return redirect('/login');
+    }
+    return user;
 };

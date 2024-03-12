@@ -1,15 +1,12 @@
-import { getUserOnServer } from '@/utils/supabase/user';
 import CreateOrg from '@/components/CreateOrg';
 import OrgCreationSuccess from '@/components/OrgCreationSuccess';
 import UsageDashboard from '@/components/UsageDashboard';
-import { redirect } from 'next/navigation';
 import ManageSelfInvites from '@/components/ManageSelfInvites';
 import { useServerOrganizationMember } from '@/hooks/useOrganizationMember';
+import { authenticatePage } from '@/utils/auth';
 
 export default async function Index() {
-    const user = await getUserOnServer();
-    if (!user) return redirect('/login');
-
+    const user = await authenticatePage()
     const organizationMember = await useServerOrganizationMember(user.id)
 
     return (

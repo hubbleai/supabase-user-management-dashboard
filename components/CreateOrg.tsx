@@ -44,7 +44,7 @@ export default function CreateOrg(props: { user: User }) {
                     email: user.email,
                     supabase_id: user.id,
                 },
-            })
+            }),
         });
 
         if (response.status !== 200) {
