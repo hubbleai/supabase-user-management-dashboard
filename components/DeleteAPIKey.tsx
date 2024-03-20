@@ -8,11 +8,13 @@ import { APIKey } from "./CreateAPIKeys";
 import { Button } from "./ui/button";
 import Loader from "./ui/Loader";
 import { Trash } from "lucide-react";
+import { requestCarbon } from "@/utils/carbon";
 
 function CreateAPIKeys(
     props: { 
         apiKey: APIKey,
         getAPIKeys: () => Promise<void>,
+        encryptedId: string,
     }
 ) {
     const [isLoading, setIsLoading] = useState(false);
@@ -27,16 +29,14 @@ function CreateAPIKeys(
         }
 
         setIsLoading(true);
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/customer/api-key/delete`, {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${user.id}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
+        const response = await requestCarbon(
+            props.encryptedId,
+            "POST",
+            "/customer/api-key/delete",
+            {
                 "api_keys": [props.apiKey.token_hash],
-            }),
-        });
+            }
+        )
 
         if (response.status !== 200) {
             toast({

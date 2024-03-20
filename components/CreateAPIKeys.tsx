@@ -17,6 +17,7 @@ import { useAuthStore } from '@/store/useAuthStore';
 import { useToast } from '@/components/ui/use-toast';
 import Loader from '@/components/ui/Loader';
 import { OrganizationMember } from '@/hooks/useOrganizationMember';
+import { requestCarbon } from '@/utils/carbon';
 
 // TODO move this interface into a dedicated file
 export interface APIKey {
@@ -32,7 +33,12 @@ export interface APIKey {
     updated_at: Date,
 }
 
-function CreateAPIKeys(props: { organizationMember: OrganizationMember }) {
+const CreateAPIKeys = (
+    props: {
+        organizationMember: OrganizationMember,
+        encryptedId: string,
+    },
+) => {
     const [label, setLabel] = useState('My New Key');
     const [key, setKey] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -47,17 +53,16 @@ function CreateAPIKeys(props: { organizationMember: OrganizationMember }) {
         }
 
         setIsLoading(true);
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/customer/api-key`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ 
+        const response = await requestCarbon(
+            props.encryptedId,
+            "POST",
+            "/customer/api-key/create",
+            { 
                 user_id: props.organizationMember.id,
                 org_id: props.organizationMember.organization_id,
                 description: label,
-            }),
-        });
+            },
+        )
 
         if (response.status !== 200) {
             toast({

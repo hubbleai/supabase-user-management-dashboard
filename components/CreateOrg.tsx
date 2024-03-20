@@ -10,8 +10,14 @@ import { MoveRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useInvitesStore } from '@/store/useInvitesStore';
 import { User } from '@supabase/supabase-js';
+import { requestCarbon } from '@/utils/carbon';
 
-export default function CreateOrg(props: { user: User }) {
+const CreateOrg = (
+    props: {
+        user: User,
+        encryptedId: string,
+    },
+) => {
     // Global state
     // const { invites } = useInvitesStore();
 
@@ -32,20 +38,18 @@ export default function CreateOrg(props: { user: User }) {
             return
         }
 
-        // TODO a util for making requests to Carbon
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/organization/create`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ 
+        const response = await requestCarbon(
+            props.encryptedId,
+            "POST",
+            "/organization/create",
+            { 
                 organization_name: organizationName,
                 organization_owner: {
                     email: user.email,
                     supabase_id: user.id,
                 },
-            }),
-        });
+            }
+        )
 
         if (response.status !== 200) {
             toast({
@@ -178,3 +182,5 @@ export default function CreateOrg(props: { user: User }) {
         </div>
     );
 }
+
+export default CreateOrg

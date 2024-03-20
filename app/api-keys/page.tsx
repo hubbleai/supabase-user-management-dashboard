@@ -6,15 +6,11 @@ import React from 'react';
 
 async function APIKeys() {
     const user = await authenticatePage();
-    const organizationMember = await useServerOrganizationMember(user.id)
-    // TODO maybe move this redirect into the hook itself
-    if (!organizationMember) {
-        return redirect('/')
-    }
+    const { organizationMember, encryptedId } = await useServerOrganizationMember(user.id)
 
     return (
         <div className="my-10 flex w-full items-center justify-center">
-            <ManageAPIKeys user={user} organizationMember={organizationMember} />
+            <ManageAPIKeys user={user} organizationMember={organizationMember} encryptedId={encryptedId} />
         </div>
     );
 }

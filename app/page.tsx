@@ -7,11 +7,11 @@ import { authenticatePage } from '@/utils/auth';
 
 export default async function Index() {
     const user = await authenticatePage()
-    const organizationMember = await useServerOrganizationMember(user.id)
+    const { organizationMember, encryptedId } = await useServerOrganizationMember(user.id)
 
     return (
         <div className="flex w-full flex-1 flex-col items-center">
-            {!organizationMember && <CreateOrg user={user} />}
+            {!organizationMember && <CreateOrg user={user} encryptedId={encryptedId} />}
             {organizationMember?.organization && <OrgCreationSuccess organization={organizationMember.organization} /> }
 
             {/* TODO */}

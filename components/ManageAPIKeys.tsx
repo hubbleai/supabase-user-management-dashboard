@@ -5,6 +5,7 @@ import CreateAPIKeys, { APIKey } from '@/components/CreateAPIKeys';
 import { OrganizationMember } from '@/hooks/useOrganizationMember';
 import { User } from '@supabase/supabase-js';
 import DeleteAPIKey from './DeleteAPIKey';
+import { requestCarbon } from '@/utils/carbon';
 
 interface ListAPIKeysResponse {
     data: APIKey[];
@@ -25,22 +26,15 @@ function ManageAPIKeys(
     props: { 
         user: User,
         organizationMember: OrganizationMember,
+        encryptedId: string,
     }
 ) {
     const [apiKeys, setAPIKeys] = useState<APIKey[]>([]);
 
     const getAPIKeys = async () => {
-        // TODO properly paginate the api key list
-        // As of now, this list only makes one request to fetch 50 api keys.
-        // It is unlike an organization will reach that limit soon, so will
-        // prioritize later.
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/customer/api-key/list?limit=50`, {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${props.user.id}`,
-            },
-        });
-
+        // TODO implement pages for api keys
+        // Organizations are limited to 100 keys
+        const response = await requestCarbon(props.encryptedId, "GET", "/customer/api-key/list?limit=100")
         if (response.status !== 200) {
             const deserializedResponse = await response.json()
             console.log(response.status, deserializedResponse)
@@ -58,7 +52,7 @@ function ManageAPIKeys(
         <div className="w-full">
             <h1 className="font-semibold">Manage API Keys</h1>
             <h1 className="mb-5"> Create or manage your API keys here.</h1>
-            <CreateAPIKeys organizationMember={props.organizationMember} />
+            <CreateAPIKeys organizationMember={props.organizationMember} encryptedId={props.encryptedId} />
             <div className="font-regular grid grid-cols-12 text-sm text-zinc-500">
                 <div className='col-span-3'>Label</div>
                 <div className='col-span-7'>Secret</div>
@@ -81,7 +75,7 @@ function ManageAPIKeys(
                             )}
                         </div>
                         <div className="col-span-1">
-                            <DeleteAPIKey apiKey={apiKey} getAPIKeys={getAPIKeys}/>
+                            <DeleteAPIKey apiKey={apiKey} getAPIKeys={getAPIKeys} encryptedId={props.encryptedId}/>
                         </div>
                     </div>
                 </React.Fragment>
