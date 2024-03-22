@@ -26,7 +26,7 @@ function ManageAPIKeys(
     props: { 
         user: User,
         organizationMember: OrganizationMember,
-        encryptedId: string,
+        secret: string,
     }
 ) {
     const [apiKeys, setAPIKeys] = useState<APIKey[]>([]);
@@ -34,7 +34,7 @@ function ManageAPIKeys(
     const getAPIKeys = async () => {
         // TODO implement pages for api keys
         // Organizations are limited to 100 keys
-        const response = await requestCarbon(props.encryptedId, "GET", "/customer/api-key/list?limit=100")
+        const response = await requestCarbon(props.secret, "GET", "/customer/api-key/list?limit=100")
         if (response.status !== 200) {
             const deserializedResponse = await response.json()
             console.log(response.status, deserializedResponse)
@@ -52,7 +52,7 @@ function ManageAPIKeys(
         <div className="w-full">
             <h1 className="font-semibold">Manage API Keys</h1>
             <h1 className="mb-5"> Create or manage your API keys here.</h1>
-            <CreateAPIKeys organizationMember={props.organizationMember} encryptedId={props.encryptedId} />
+            <CreateAPIKeys organizationMember={props.organizationMember} secret={props.secret} />
             <div className="font-regular grid grid-cols-12 text-sm text-zinc-500">
                 <div className='col-span-3'>Label</div>
                 <div className='col-span-7'>Secret</div>
@@ -75,7 +75,7 @@ function ManageAPIKeys(
                             )}
                         </div>
                         <div className="col-span-1">
-                            <DeleteAPIKey apiKey={apiKey} getAPIKeys={getAPIKeys} encryptedId={props.encryptedId}/>
+                            <DeleteAPIKey apiKey={apiKey} getAPIKeys={getAPIKeys} secret={props.secret}/>
                         </div>
                     </div>
                 </React.Fragment>

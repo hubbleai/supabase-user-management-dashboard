@@ -15,7 +15,7 @@ import { requestCarbon } from '@/utils/carbon';
 const CreateOrg = (
     props: {
         user: User,
-        encryptedId: string,
+        secret: string,
     },
 ) => {
     // Global state
@@ -38,8 +38,11 @@ const CreateOrg = (
             return
         }
 
+        // The endpoint /organization/create takes no form of authentication.
+        // Instead it queries supabase to make sure the user actually exists.
+        // For that reason, null is passed in for the parameter secret.
         const response = await requestCarbon(
-            props.encryptedId,
+            null,                               
             "POST",
             "/organization/create",
             { 
@@ -47,6 +50,7 @@ const CreateOrg = (
                 organization_owner: {
                     email: user.email,
                     supabase_id: user.id,
+                    secret: props.secret,
                 },
             }
         )

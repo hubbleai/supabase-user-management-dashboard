@@ -14,7 +14,7 @@ function CreateAPIKeys(
     props: { 
         apiKey: APIKey,
         getAPIKeys: () => Promise<void>,
-        encryptedId: string,
+        secret: string,
     }
 ) {
     const [isLoading, setIsLoading] = useState(false);
@@ -30,7 +30,7 @@ function CreateAPIKeys(
 
         setIsLoading(true);
         const response = await requestCarbon(
-            props.encryptedId,
+            props.secret,
             "POST",
             "/customer/api-key/delete",
             {

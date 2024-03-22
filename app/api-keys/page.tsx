@@ -5,12 +5,12 @@ import { redirect } from 'next/navigation';
 import React from 'react';
 
 async function APIKeys() {
-    const user = await authenticatePage();
-    const { organizationMember, encryptedId } = await useServerOrganizationMember(user.id)
+    const [user, secret] = await authenticatePage()
+    const organizationMember = await useServerOrganizationMember(secret)
 
     return (
         <div className="my-10 flex w-full items-center justify-center">
-            <ManageAPIKeys user={user} organizationMember={organizationMember} encryptedId={encryptedId} />
+            <ManageAPIKeys user={user} organizationMember={organizationMember} secret={secret} />
         </div>
     );
 }

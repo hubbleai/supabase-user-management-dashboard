@@ -36,7 +36,7 @@ export interface APIKey {
 const CreateAPIKeys = (
     props: {
         organizationMember: OrganizationMember,
-        encryptedId: string,
+        secret: string,
     },
 ) => {
     const [label, setLabel] = useState('My New Key');
@@ -54,7 +54,7 @@ const CreateAPIKeys = (
 
         setIsLoading(true);
         const response = await requestCarbon(
-            props.encryptedId,
+            props.secret,
             "POST",
             "/customer/api-key/create",
             { 

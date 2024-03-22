@@ -1,14 +1,15 @@
 export const requestCarbon = async (
-    encryptedId: string,
+    secret: string | null,
     method: string,
     endpoint: string,
     body?: { [key: string]: any },
 ): Promise<Response> => {
-    let headers: HeadersInit = { 
-        "Authorization": `Bearer ${encryptedId}`,
+    let headers: HeadersInit = {}
+    if (secret) {
+        headers["Authorization"] = `Bearer ${secret}`;
     }
     if (method === "POST") {
-        headers["Content-Type"] = "application/json"
+        headers["Content-Type"] = "application/json";
     }
 
     return await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
