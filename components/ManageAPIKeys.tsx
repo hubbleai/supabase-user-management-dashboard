@@ -6,8 +6,9 @@ import { OrganizationMember } from '@/hooks/useOrganizationMember';
 import { User } from '@supabase/supabase-js';
 import DeleteAPIKey from './DeleteAPIKey';
 import { requestCarbon } from '@/utils/carbon';
+import { useToast } from './ui/use-toast';
 
-interface ListAPIKeysResponse {
+type ListAPIKeysResponse = {
     data: APIKey[];
     count: number;
 }
@@ -31,13 +32,14 @@ function ManageAPIKeys(
 ) {
     const [apiKeys, setAPIKeys] = useState<APIKey[]>([]);
 
+    const { toast } = useToast();
+
     const getAPIKeys = async () => {
         // TODO implement pages for api keys
         // Organizations are limited to 100 keys
         const response = await requestCarbon(props.secret, "GET", "/customer/api-key/list?limit=100")
         if (response.status !== 200) {
-            const deserializedResponse = await response.json()
-            console.log(response.status, deserializedResponse)
+            toast({ description: "An error occured. Please try again." })
         } else {
             const deserializedResponse: ListAPIKeysResponse = await response.json()
             setAPIKeys(deserializedResponse.data)

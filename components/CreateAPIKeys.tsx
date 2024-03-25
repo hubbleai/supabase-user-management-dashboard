@@ -18,9 +18,10 @@ import { useToast } from '@/components/ui/use-toast';
 import Loader from '@/components/ui/Loader';
 import { OrganizationMember } from '@/hooks/useOrganizationMember';
 import { requestCarbon } from '@/utils/carbon';
+import { useRouter } from 'next/navigation';
 
-// TODO move this interface into a dedicated file
-export interface APIKey {
+// TODO move this type into a dedicated file
+export type APIKey = {
     id: number;
     token_hash: string;
     description?: string;
@@ -44,11 +45,17 @@ const CreateAPIKeys = (
     const [isLoading, setIsLoading] = useState(false);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+    const router = useRouter();
     const { user } = useAuthStore();
     const { toast } = useToast();
 
     const createAPIKey = async () => {
-        if (!label || !user ) {
+        if (!user) {
+            router.push("/login");
+            return;
+        }
+        if (!label) {
+            toast({ description: "Please label the new api key." });
             return;
         }
 

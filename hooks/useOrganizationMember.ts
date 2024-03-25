@@ -2,9 +2,9 @@
 import { requestCarbon } from "@/utils/carbon";
 import { redirect } from "next/navigation";
 
-// TODO create interfaces for properties using any
-// TODO move these interfaces into a dedicated file
-export interface Organization {
+// TODO create types for properties using any
+// TODO move these types into a dedicated file
+export type Organization = {
     id: number;
     name: string;
     nickname?: string;
@@ -19,7 +19,7 @@ export interface Organization {
     cancel_at_period_end?: boolean;
 }
 
-export interface OrganizationMember {
+export type OrganizationMember = {
     id: number;
     email: string;
     first_name?: string;
