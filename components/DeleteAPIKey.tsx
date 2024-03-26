@@ -32,9 +32,9 @@ function CreateAPIKeys(
         const response = await requestCarbon(
             props.secret,
             "POST",
-            "/customer/api-key/delete",
+            "/customer/api_key/delete",
             {
-                "api_keys": [props.apiKey.token_hash],
+                "api_key_ids": [props.apiKey.id],
             }
         )
 

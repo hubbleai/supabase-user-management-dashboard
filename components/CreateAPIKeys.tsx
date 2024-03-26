@@ -63,7 +63,7 @@ const CreateAPIKeys = (
         const response = await requestCarbon(
             props.secret,
             "POST",
-            "/customer/api-key/create",
+            "/customer/api_key",
             { 
                 user_id: props.organizationMember.id,
                 org_id: props.organizationMember.organization_id,

@@ -13,14 +13,6 @@ type ListAPIKeysResponse = {
     count: number;
 }
 
-// function that returns strings in a hidden format: "[first two]********[last two readable]"
-const hideString = (str: string) => {
-    const firstTwo = str.slice(0, 2);
-    const lastTwo = str.slice(-2);
-    const hidden = str.slice(2, -2).replace(/./g, '*');
-    return `${firstTwo}${hidden}${lastTwo}`;
-};
-
 const isPastDate = (date: Date) =>  date <= new Date()
 
 function ManageAPIKeys(
@@ -37,7 +29,7 @@ function ManageAPIKeys(
     const getAPIKeys = async () => {
         // TODO implement pages for api keys
         // Organizations are limited to 100 keys
-        const response = await requestCarbon(props.secret, "GET", "/customer/api-key/list?limit=100")
+        const response = await requestCarbon(props.secret, "GET", "/customer/api_key?limit=100")
         if (response.status !== 200) {
             toast({ description: "An error occured. Please try again." })
         } else {
@@ -68,7 +60,7 @@ function ManageAPIKeys(
                         key={apiKey.id}
                     >
                         <div className='col-span-3'>{apiKey.description}</div>
-                        <div className='col-span-7'>{hideString(apiKey.token_hash)}</div>
+                        <div className='col-span-7'>{apiKey.token_hash}</div>
                         <div>
                             {isPastDate(apiKey.expires_at) ? (
                                 <span className="text-red-500">Expired</span>
