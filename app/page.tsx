@@ -6,6 +6,7 @@ import { useServerOrganizationMember } from '@/hooks/useOrganizationMember';
 import { authenticatePage } from '@/utils/auth';
 
 export default async function Index() {
+    console.log("INDEX PAGE")
     const [user, secret] = await authenticatePage()
     const organizationMember = await useServerOrganizationMember(secret, false)
 
