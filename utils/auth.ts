@@ -6,7 +6,8 @@ export const authenticatePage = async (): Promise<[User, string]> => {
     const user_data = await getUserOnServer();
     const [user, secret] = user_data
     if (!user || !secret) {
-        return redirect('/login');
+        throw Error()
+        // return redirect('/login');
     }
     return [user, secret];
 };

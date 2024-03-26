@@ -14,7 +14,10 @@ export const getUserOnServer = async (): Promise<[User | null, string | null]> =
 
   const {
     data: { user },
+    error,
   } = await supabase.auth.getUser();
+
+  console.log("ERROR:", error)
 
   if (!user) {
     return [null, null]
