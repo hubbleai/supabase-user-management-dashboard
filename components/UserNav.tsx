@@ -59,7 +59,16 @@ export default function UserNav() {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                    <DropdownMenuItem>Manage API Keys</DropdownMenuItem>
+                    <DropdownMenuItem>
+                        <button onClick={() => router.push("/api-keys")}>
+                            Manage API Keys
+                        </button>
+                    </DropdownMenuItem>
+                    {/* <DropdownMenuItem>
+                        <button onClick={() => router.push("/carbon-connect")}>
+                            Carbon Connect
+                        </button>
+                    </DropdownMenuItem> */}
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>

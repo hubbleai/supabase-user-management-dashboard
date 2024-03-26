@@ -1,7 +1,12 @@
 import { redirect } from 'next/navigation';
 import { getUserOnServer } from './supabase/user';
+import { User } from '@supabase/supabase-js';
 
-export const authenticatePage = async () => {
-    const user = await getUserOnServer();
-    if (!user) return redirect('/login');
+export const authenticatePage = async (): Promise<[User, string]> => {
+    const user_data = await getUserOnServer();
+    const [user, secret] = user_data
+    if (!user || !secret) {
+        return redirect('/login');
+    }
+    return [user, secret];
 };

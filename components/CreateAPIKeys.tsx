@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -14,48 +13,78 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { createClient } from '@/utils/supabase/client';
 import { useAuthStore } from '@/store/useAuthStore';
-import { useOrgsStore } from '@/store/useOrgsStore';
 import { useToast } from '@/components/ui/use-toast';
 import Loader from '@/components/ui/Loader';
+import { OrganizationMember } from '@/hooks/useOrganizationMember';
+import { requestCarbon } from '@/utils/carbon';
+import { useRouter } from 'next/navigation';
 
-const supabase = createClient();
+// TODO move this type into a dedicated file
+export type APIKey = {
+    id: number;
+    token_hash: string;
+    description?: string;
+    customer_id: number;
+    customer_email: string;
+    organization_id: number;
+    organization_name: string,
+    expires_at: Date,
+    created_at: Date,
+    updated_at: Date,
+}
 
-function CreateAPIKeys() {
+const CreateAPIKeys = (
+    props: {
+        organizationMember: OrganizationMember,
+        secret: string,
+    },
+) => {
     const [label, setLabel] = useState('My New Key');
     const [key, setKey] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const { user } = useAuthStore();
-    const { toast } = useToast();
-    const { activeOrg } = useOrgsStore();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-    const createAPIKey = async () => {
-        if (!label || !user || !activeOrg) return;
-        setIsLoading(true); // Start loading
-        const newKey = uuidv4();
-        const { error } = await supabase.from('api_keys').insert([
-            {
-                key: newKey,
-                label,
-                created_by: user.id,
-                org_id: activeOrg.org_id,
-            },
-        ]);
+    const router = useRouter();
+    const { user } = useAuthStore();
+    const { toast } = useToast();
 
-        setIsLoading(false); // Stop loading
-        if (error) {
+    const createAPIKey = async () => {
+        if (!user) {
+            router.push("/login");
+            return;
+        }
+        if (!label) {
+            toast({ description: "Please label the new api key." });
+            return;
+        }
+
+        setIsLoading(true);
+        const response = await requestCarbon(
+            props.secret,
+            "POST",
+            "/customer/api_key",
+            { 
+                user_id: props.organizationMember.id,
+                org_id: props.organizationMember.organization_id,
+                description: label,
+            },
+        )
+
+        if (response.status !== 200) {
             toast({
                 description: 'API Key Creation Failed',
             });
         } else {
+            const newKey: APIKey = await response.json()
+
             toast({
                 description: 'New API Key Created',
             });
-            setKey(newKey);
+            setKey(newKey.token_hash);
             setIsDialogOpen(false); // Close the dialog on success
         }
+        setIsLoading(false);
     };
 
     return (

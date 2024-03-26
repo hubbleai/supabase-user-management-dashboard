@@ -10,56 +10,81 @@ import Loader from '@/components/ui/Loader';
 
 const supabase = createClient();
 
+enum LoginPageForm {
+    AUTHENTICATION = "AUTHENTICATION",
+    PASSWORD_RESET = "PASSWORD_RESET",
+}
+
 enum AuthState {
-    Idle = 'IDLE',
-    SigningIn = 'SIGNING_IN',
-    SigningUp = 'SIGNING_UP',
+    Idle = "IDLE",
+    SigningIn = "SIGNING_IN",
+    SigningUp = "SIGNING_UP",
+    SendingEmailForReset = "SENDING_EMAIL_FOR_RESET",
 }
 
 export default function Login() {
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    const [loginPageForm, setLoginPageForm] = useState(LoginPageForm.AUTHENTICATION)
     const [authState, setAuthState] = useState(AuthState.Idle);
 
     const { user, loading } = useAuthStore();
 
     const signIn = async () => {
         setAuthState(AuthState.SigningIn);
-        const { error } = await supabase.auth.signInWithPassword({
-            email,
-            password,
-        });
+        const { error } = await supabase.auth.signInWithPassword(
+            {
+                email,
+                password,
+            }
+        );
+        setAuthState(AuthState.Idle);
 
-        if (error) {
-            setAuthState(AuthState.Idle);
-            return router.push('/login?message=Could not authenticate user');
-        }
-        return router.push('/');
+        return router.push(
+            error
+                ? "/login?message=Could not authenticate user"
+                : "/"
+        )
     };
 
     const signUp = async () => {
         setAuthState(AuthState.SigningUp);
-        const origin = window.location.origin;
-
-        const { error } = await supabase.auth.signUp({
-            email,
-            password,
-            options: {
-                emailRedirectTo: `${origin}/auth/callback`,
-            },
-        });
-
-        if (error) {
-            setAuthState(AuthState.Idle);
-            return router.push('/login?message=Could not authenticate user');
-        }
-
+        const { error } = await supabase.auth.signUp(
+            {
+                email,
+                password,
+                options: {
+                    emailRedirectTo: `${window.location.origin}/auth/callback`,
+                },
+            }
+        );
         setAuthState(AuthState.Idle);
+
         return router.push(
-            '/login?message=Check email to continue sign in process'
+            error
+                ? "/login?message=Could not authenticate user."
+                : "/login?message=Check your email to continue sign up."
         );
     };
+
+    const sendEmailForReset = async () => {
+        setAuthState(AuthState.SendingEmailForReset);
+        const { error } = await supabase.auth.resetPasswordForEmail(
+            email,
+            {
+                redirectTo: `${window.location.origin}/reset-password`
+            }
+        );
+        setAuthState(AuthState.Idle)
+
+        return router.push(
+            error
+                ? "/login?message=Could not send email for password reset."
+                : "/login?message=Check your email to continue with password reset."
+        )
+    } 
 
     if (user) {
         router.push('/');
@@ -81,22 +106,36 @@ export default function Login() {
                 <Suspense fallback={<div>Loading...</div>}>
                     <SearchParamsComponent />
                 </Suspense>
-                <AuthFormComponent
-                    email={email}
-                    setEmail={setEmail}
-                    password={password}
-                    setPassword={setPassword}
-                    authState={authState}
-                    setAuthState={setAuthState}
-                    signIn={signIn}
-                    signUp={signUp}
-                />
+                { 
+                    loginPageForm == LoginPageForm.AUTHENTICATION && 
+                    <AuthFormComponent
+                        email={email}
+                        setEmail={setEmail}
+                        password={password}
+                        setPassword={setPassword}
+                        authState={authState}
+                        setAuthState={setAuthState}
+                        signIn={signIn}
+                        signUp={signUp}
+                        setLoginPageForm={setLoginPageForm}
+                    />
+                }
+                {
+                    loginPageForm == LoginPageForm.PASSWORD_RESET &&
+                    <SendEmailForResetForm
+                        email={email}
+                        setEmail={setEmail}
+                        authState={authState}
+                        sendEmailForPasswordReset={sendEmailForReset}
+                        setLoginPageForm={setLoginPageForm}
+                    />
+                }
             </div>
         </Suspense>
     );
 }
 
-function SearchParamsComponent() {
+const SearchParamsComponent = () => {
     const searchParams = useSearchParams();
     const message = searchParams.get('message');
     return message ? (
@@ -106,7 +145,7 @@ function SearchParamsComponent() {
     ) : null;
 }
 
-function AuthFormComponent({
+const AuthFormComponent = ({
     email,
     setEmail,
     password,
@@ -115,6 +154,7 @@ function AuthFormComponent({
     setAuthState,
     signIn,
     signUp,
+    setLoginPageForm,
 }: {
     email: string;
     setEmail: (email: string) => void;
@@ -124,7 +164,8 @@ function AuthFormComponent({
     setAuthState: (authState: AuthState) => void;
     signIn: () => Promise<void>;
     signUp: () => Promise<void>;
-}) {
+    setLoginPageForm: (loginPageForm: LoginPageForm) => void;
+}) => {
     return (
         <>
             <label className="text-md" htmlFor="email">
@@ -164,12 +205,76 @@ function AuthFormComponent({
                 type="button"
                 onClick={signUp}
                 disabled={authState !== AuthState.Idle}
-                className="mb-2 rounded-md border border-foreground/20 px-4 py-2 text-foreground"
+                className="rounded-md border border-foreground/20 px-4 py-2 text-foreground"
             >
                 {authState === AuthState.SigningUp
                     ? 'Signing Up...'
                     : 'Sign Up'}
             </button>
+            <div className="flex justify-center">
+                <button
+                    type="button"
+                    onClick={() => setLoginPageForm(LoginPageForm.PASSWORD_RESET)}
+                    disabled={authState !== AuthState.Idle}
+                    className="w-fit focus:outline-none  justify-center text-zinc-500 hover:text-zinc-700 text-sm underline"
+                >
+                    Need to reset your password?
+                </button>
+            </div>
         </>
+    );
+}
+
+const SendEmailForResetForm = (
+    {
+        email,
+        setEmail,
+        authState,
+        sendEmailForPasswordReset,
+        setLoginPageForm,
+
+    } : {
+        email: string;
+        setEmail: (email: string) => void;
+        authState: AuthState;
+        sendEmailForPasswordReset: () => Promise<void>;
+        setLoginPageForm: (loginPageForm: LoginPageForm) => void;
+    }
+) => {
+    return (
+        <div className="flex flex-col gap-2">
+            <label className="text-md" htmlFor="email">
+                Please enter your account's email.
+            </label>
+            <input
+                className="mb-6 rounded-md border bg-inherit px-4 py-2"
+                name="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+            />
+            
+            <button
+                type="button"
+                onClick={sendEmailForPasswordReset}
+                disabled={authState !== AuthState.Idle}
+                className="mb-2 rounded-md bg-zinc-800 px-4 py-2 text-white"
+            >
+                {authState === AuthState.SendingEmailForReset
+                    ? 'Sending'
+                    : 'Send'}
+            </button>
+            <div className="flex justify-center">
+                <button
+                    type="button"
+                    onClick={() => setLoginPageForm(LoginPageForm.AUTHENTICATION)}
+                    disabled={authState !== AuthState.Idle}
+                    className="w-fit focus:outline-none  justify-center text-zinc-500 hover:text-zinc-700 text-sm underline"
+                >
+                    Go back
+                </button>
+            </div>
+        </div>
     );
 }
