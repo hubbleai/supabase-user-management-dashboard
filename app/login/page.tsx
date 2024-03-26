@@ -51,6 +51,7 @@ export default function Login() {
 
     const signUp = async () => {
         setAuthState(AuthState.SigningUp);
+        console.log(`${window.location.origin}/auth/callback`)
         const { error } = await supabase.auth.signUp(
             {
                 email,
