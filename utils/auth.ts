@@ -6,8 +6,8 @@ export const authenticatePage = async (): Promise<[User, string]> => {
     const user_data = await getUserOnServer();
     const [user, secret] = user_data
     if (!user || !secret) {
-        throw Error()
-        // return redirect('/login');
+        console.log("NO USER FOUND")
+        return redirect('/login');
     }
     return [user, secret];
 };
