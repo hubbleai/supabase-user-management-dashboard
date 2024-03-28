@@ -25,12 +25,12 @@ const ResetPassword = () => {
     }
 
     return (
-      <div className="flex flex-col gap-2 mx-auto mt-10 w-full flex-1 justify-center gap-2 px-8 sm:max-w-md">
+      <div className="flex flex-col gap-2 mx-auto mt-10 w-full flex-1 justify-center px-8 sm:max-w-md">
         <label className="text-md" htmlFor="passworc">
           Please enter a new password.
         </label>
         <input
-            className="mb-6 rounded-md border bg-inherit px-4 py-2"
+            className="mb-4 rounded-md border bg-inherit px-4 py-2"
             type="password"
             name="password"
             placeholder="New Password"

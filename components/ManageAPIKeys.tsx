@@ -44,30 +44,38 @@ function ManageAPIKeys(
 
     return (
         <div className="w-full">
-            <h1 className="font-semibold">Manage API Keys</h1>
-            <h1 className="mb-5"> Create or manage your API keys here.</h1>
-            <CreateAPIKeys organizationMember={props.organizationMember} secret={props.secret} />
-            <div className="font-regular grid grid-cols-12 text-sm text-zinc-500">
-                <div className='col-span-3'>Label</div>
-                <div className='col-span-7'>Secret</div>
-                <div>Status</div>
+
+            <div className="flex items-center justify-between pb-12">
+                <div>
+                    <h1 className="font-bold text-lg">Manage API Keys</h1>
+                    <p className=""> Create or manage your API keys here.</p>
+                </div>
+
+                <CreateAPIKeys organizationMember={props.organizationMember} secret={props.secret} />
+            </div>
+           
+            <div className="font-regular grid grid-cols-12 text-md pb-2 font-semibold text-black">
+                <div className='col-span-3 text-md'>Label</div>
+                <div className='text-md'>Status</div>
+                <div className='col-span-7 px-4 text-md'>Secret</div>
             </div>
             <hr />
             {apiKeys.map((apiKey) => (
                 <React.Fragment key={apiKey.id}>
                     <div
-                        className="grid grid-cols-12 py-2 flex justify-center items-center"
+                        className="grid grid-cols-12 text-sm justify-center items-center"
                         key={apiKey.id}
                     >
-                        <div className='col-span-3'>{apiKey.description}</div>
-                        <div className='col-span-7'>{apiKey.token_hash}</div>
+                        <div className='col-span-3 font-semibold'>{apiKey.description}</div>
                         <div>
                             {isPastDate(apiKey.expires_at) ? (
-                                <span className="text-red-500">Expired</span>
+                                <span className="text-white bg-red-600 rounded-lg px-2 py-1 text-sm">Expired</span>
                             ) : (
-                                <span className="text-green-500">Active</span>
+                                <span className="text-white bg-green-600 rounded-lg px-2 py-1 text-sm">Active</span>
                             )}
                         </div>
+                        <div className='col-span-7 px-4'>{apiKey.token_hash}</div>
+                     
                         <div className="col-span-1">
                             <DeleteAPIKey apiKey={apiKey} getAPIKeys={getAPIKeys} secret={props.secret}/>
                         </div>
