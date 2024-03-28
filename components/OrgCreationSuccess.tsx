@@ -14,12 +14,12 @@ function OrgCreationSuccess(props: { organization: Organization }) {
     }
 
     return (
-        <div className="my-10 flex flex-col rounded-xl bg-[#506385] px-10 py-5 text-white animate-in">
-            <h1 className="flex w-full items-center text-2xl  text-white animate-in">
+        <div className="my-10 mx-8 flex flex-col rounded-xl bg-[#00A87A] px-10 py-5 text-white animate-in">
+            <h1 className="flex w-full items-center text-2xl mt-3 text-white animate-in">
                 <CheckCircle className="mr-2 stroke-[3px]" />
                 Success
             </h1>
-            <h2 className="font-light text-zinc-200">
+            <h2 className="font-light my-2 text-zinc-200">
                 🎉
                 <span className="leading-tight underline underline-offset-4">
                     {props.organization.name}

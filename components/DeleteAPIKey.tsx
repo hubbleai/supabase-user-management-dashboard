@@ -61,15 +61,14 @@ function CreateAPIKeys(
                         size="icon"
                         onClick={() => setIsDialogOpen(true)}
                     >
-                        <Trash size={18}/>
+                        <Trash size={15}/>
                     </Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
-                        <DialogTitle>Delete API Key</DialogTitle>
-                        <DialogDescription>
-                            This API key will not be usable after deletion.
-                            Are you sure you want to delete "{props.apiKey.description}"
+                        <DialogTitle className="pb-2">Delete API Key</DialogTitle>
+                        <DialogDescription className="pb-6">
+                            Are you sure you want to delete "{props.apiKey.description}"? This API key will not be usable after deletion.
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>

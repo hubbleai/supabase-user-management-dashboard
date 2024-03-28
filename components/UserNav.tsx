@@ -11,7 +11,9 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-
+import Link from 'next/link';
+import { IoBookOutline } from "react-icons/io5";
+import { IoMdHelpCircleOutline } from "react-icons/io";
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
@@ -34,6 +36,9 @@ export default function UserNav() {
 
     return (
         <DropdownMenu>
+              <Link href="mailto:derek@carbon.ai" className="flex border px-3 hover:bg-gray-50 py-1 rounded-md items-center gap-2"><IoMdHelpCircleOutline /> Help</Link>       
+                    <Link href="https://docs.carbon.ai" className="flex border px-3 hover:bg-gray-50 py-1 rounded-md items-center gap-2"><IoBookOutline /> Docs</Link>
+
             <DropdownMenuTrigger asChild>
                 <Button
                     variant="ghost"
@@ -46,7 +51,7 @@ export default function UserNav() {
                     </Avatar>
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end" forceMount>
+            <DropdownMenuContent className="w-56 mt-4" align="end" forceMount>
                 <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
                         <p className="text-sm font-medium leading-none">
@@ -59,11 +64,12 @@ export default function UserNav() {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem className="">
                         <button onClick={() => router.push("/api-keys")}>
                             Manage API Keys
                         </button>
                     </DropdownMenuItem>
+                   
                     {/* <DropdownMenuItem>
                         <button onClick={() => router.push("/carbon-connect")}>
                             Carbon Connect

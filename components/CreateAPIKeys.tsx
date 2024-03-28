@@ -88,7 +88,7 @@ const CreateAPIKeys = (
     };
 
     return (
-        <div className="my-5">
+        <div className="">
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild>
                     <Button
@@ -100,16 +100,16 @@ const CreateAPIKeys = (
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
-                        <DialogTitle>Create New Key</DialogTitle>
-                        <DialogDescription>
+                        <DialogTitle className="pb-2">Create New Key</DialogTitle>
+                        <DialogDescription className="pb-1">
                             Anyone with this key will be able to access Carbon
-                            APIs on behalf of your org. You can disable or
+                            APIs on behalf of your organization. You can
                             delete the key at any time.
                         </DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="name" className="text-right">
+                            <Label htmlFor="name" className="text-left text-sm">
                                 Label
                             </Label>
                             <Input

@@ -169,12 +169,12 @@ const CreateOrg = (
             <button
                 onClick={() => handleOrganizationCreation(organizationName)}
                 disabled={!organizationName}
-                className="my-4 flex items-center justify-center rounded-lg border bg-zinc-900 px-4 py-2 text-white transition-colors duration-300 ease-in-out hover:bg-zinc-950 disabled:cursor-not-allowed"
+                className=" flex items-center justify-center rounded-lg border bg-[#00A87A] px-4 py-2 text-white transition-colors duration-300 ease-in-out hover:bg-[#00A87A]/85 disabled:cursor-not-allowed"
             >
                 {status === Status.Loading && (
-                    <Loader color="bg-zinc-200" className="mr-2" />
+                    <Loader color="00A87A" className="mr-2 items-center"/>
                 )}
-                Create Org
+                Create Organization
                 <motion.div
                     animate={{ opacity: organizationName ? 1 : 0, x: organizationName ? 0 : -10 }}
                     transition={{ duration: 0.2, ease: 'easeInOut' }}

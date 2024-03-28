@@ -139,8 +139,8 @@ const SearchParamsComponent = () => {
     const searchParams = useSearchParams();
     const message = searchParams.get('message');
     return message ? (
-        <p className="my-4 rounded-md border border-zinc-300 bg-zinc-100 p-4 text-zinc-700">
-            <AlertCircle className="mr-2 inline-flex" /> {message}
+        <p className="my-3 rounded-md border border-zinc-300 bg-zinc-100 px-4 py-3 text-zinc-700">
+            <AlertCircle className="w-5 mr-2 inline-flex" /> {message}
         </p>
     ) : null;
 }
@@ -168,22 +168,22 @@ const AuthFormComponent = ({
 }) => {
     return (
         <>
-            <label className="text-md" htmlFor="email">
+            <label className="text-md font-semibold" htmlFor="email">
                 Email
             </label>
             <input
-                className="mb-6 rounded-md border bg-inherit px-4 py-2"
+                className="mb-4 rounded-md border bg-inherit px-4 py-2"
                 name="email"
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
             />
-            <label className="text-md" htmlFor="password">
+            <label className="text-md font-semibold" htmlFor="password">
                 Password
             </label>
             <input
-                className="mb-6 rounded-md border bg-inherit px-4 py-2"
+                className="mb-4 rounded-md border bg-inherit px-4 py-2"
                 type="password"
                 name="password"
                 placeholder="••••••••"
@@ -195,7 +195,7 @@ const AuthFormComponent = ({
                 type="button"
                 onClick={signIn}
                 disabled={authState !== AuthState.Idle}
-                className="mb-2 rounded-md bg-zinc-800 px-4 py-2 text-white"
+                className="mb-2 rounded-md bg-[#00A87A] px-4 py-2 text-white"
             >
                 {authState === AuthState.SigningIn
                     ? 'Signing In...'
@@ -244,10 +244,10 @@ const SendEmailForResetForm = (
     return (
         <div className="flex flex-col gap-2">
             <label className="text-md" htmlFor="email">
-                Please enter your account's email.
+                Please enter the email address for your account.
             </label>
             <input
-                className="mb-6 rounded-md border bg-inherit px-4 py-2"
+                className="mb-4 rounded-md border bg-inherit px-4 py-2"
                 name="email"
                 placeholder="you@example.com"
                 value={email}
@@ -259,11 +259,11 @@ const SendEmailForResetForm = (
                 type="button"
                 onClick={sendEmailForPasswordReset}
                 disabled={authState !== AuthState.Idle}
-                className="mb-2 rounded-md bg-zinc-800 px-4 py-2 text-white"
+                className="mb-2 rounded-md bg-[#00A87A] hover:bg-[#00A87A]/85 px-4 py-2 text-white"
             >
                 {authState === AuthState.SendingEmailForReset
-                    ? 'Sending'
-                    : 'Send'}
+                    ? 'Sending Reset Email'
+                    : 'Reset Password'}
             </button>
             <div className="flex justify-center">
                 <button

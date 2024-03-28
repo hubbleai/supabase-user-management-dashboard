@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -25,17 +26,27 @@ function OrgSelector() {
     const { activeOrg, orgs, loading, setActiveOrg } = useOrgsStore();
 
     if (loading || !orgs.length) {
-        return (
-            <Link href="/">
-                <h1 className="text-2xl font-bold text-zinc-700">Carbon</h1>
-            </Link>
+        return (      
+            <Image
+                src="/logo-carbon.png"
+                width={150}
+                height={100}
+                alt="Picture of the author"
+            />
+
         );
     }
     return (
         <div className="flex items-center">
-            <Link href="/">
-                <h1 className="text-2xl font-bold text-zinc-700">Carbon</h1>
-            </Link>
+                
+            <Image
+                src="logo-carbon.png"
+                width={150}
+                height={100}
+                alt="Picture of the author"
+            />
+
+
             <div className="flex items-center animate-in">
                 <div className="mx-4 h-6 w-[1px] rotate-[20deg] bg-zinc-400"></div>
                 <Popover open={open} onOpenChange={setOpen}>

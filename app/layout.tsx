@@ -31,7 +31,6 @@ export default function RootLayout({
                     <div className="w-full max-w-4xl px-3 opacity-0 animate-in">
                         {children}
                     </div>
-                    <Footer />
                     <Toaster />
                 </main>
             </body>
