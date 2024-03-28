@@ -141,7 +141,7 @@ const CreateOrg = (
         await createOrganization(organizationName, props.user);
         // await createAdminRoleForNewOrg(props.userId);
         setStatus(Status.Success);
-        router.push('/?orgCreated=true');
+        router.push('/api-keys');
     };
 
     // if (invites.length > 0) {

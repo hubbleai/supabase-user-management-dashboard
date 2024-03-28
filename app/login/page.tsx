@@ -45,7 +45,7 @@ export default function Login() {
         return router.push(
             error
                 ? "/login?message=Could not authenticate user"
-                : "/"
+                : "/api-keys"
         )
     };
 
@@ -87,7 +87,7 @@ export default function Login() {
     } 
 
     if (user) {
-        router.push('/');
+        router.push('/api-keys');
         return null;
     }
 
