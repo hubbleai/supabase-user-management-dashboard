@@ -62,10 +62,10 @@ function ManageAPIKeys(
 
             {
                 newKey && (
-                    <div className="mb-8">
+                    <div className="mb-8 border p-4 rounded-lg">
                         <h3 className="text-lg font-semibold">New API Key</h3>
-                        <p className="text-sm text-zinc-500">
-                            Save this key, it will not be shown again.
+                        <p className="text-sm text-zinc-500 pb-2">
+                            Please save this key since it will not be shown again.
                         </p>
                         <div className="mt-2 rounded-lg bg-zinc-100 p-4">{newKey.token_hash}</div>
                     </div>

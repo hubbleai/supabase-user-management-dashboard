@@ -155,8 +155,8 @@ const CreateOrg = (
                 Create an Organization
             </h3>
             <h4 className="text-md text-zinc-500">
-                Write display name of your organization. You can change this
-                later in settings.
+                Create the display name of your organization. You can change this
+                name later in the settings.
             </h4>
             <input
                 type="text"
