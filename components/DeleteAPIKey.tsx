@@ -15,6 +15,8 @@ function CreateAPIKeys(
         apiKey: APIKey,
         getAPIKeys: () => Promise<void>,
         secret: string,
+        newKey: APIKey | null,
+        setNewKey: (newKey: null) => void,
     }
 ) {
     const [isLoading, setIsLoading] = useState(false);
@@ -43,6 +45,10 @@ function CreateAPIKeys(
                 description: 'API Key Deletion Failed',
             });
         } else {
+            if (props.newKey && props.apiKey.id === props.newKey.id) {
+                props.setNewKey(null);
+            }
+
             toast({
                 description: "API Key Deleted.",
             });

@@ -22,6 +22,7 @@ function ManageAPIKeys(
         secret: string,
     }
 ) {
+    const [newKey, setNewKey] = useState<APIKey | null>(null);
     const [apiKeys, setAPIKeys] = useState<APIKey[]>([]);
 
     const { toast } = useToast();
@@ -45,14 +46,31 @@ function ManageAPIKeys(
     return (
         <div className="w-full">
 
-            <div className="flex items-center justify-between pb-12">
+            <div className="flex items-center justify-between mb-8">
                 <div>
                     <h1 className="font-bold text-lg">Manage API Keys</h1>
                     <p className=""> Create or manage your API keys here.</p>
                 </div>
 
-                <CreateAPIKeys organizationMember={props.organizationMember} secret={props.secret} />
+                <CreateAPIKeys
+                    organizationMember={props.organizationMember}
+                    secret={props.secret}
+                    setNewKey={setNewKey}
+                    getAPIKeys={getAPIKeys}
+                />
             </div>
+
+            {
+                newKey && (
+                    <div className="mb-8">
+                        <h3 className="text-lg font-semibold">New API Key</h3>
+                        <p className="text-sm text-zinc-500">
+                            Save this key, it will not be shown again.
+                        </p>
+                        <div className="mt-2 rounded-lg bg-zinc-100 p-4">{newKey.token_hash}</div>
+                    </div>
+                )
+            }
            
             <div className="font-regular grid grid-cols-12 text-md pb-2 font-semibold text-black">
                 <div className='col-span-3 text-md'>Label</div>
@@ -77,7 +95,13 @@ function ManageAPIKeys(
                         <div className='col-span-7 px-4'>{apiKey.token_hash}</div>
                      
                         <div className="col-span-1">
-                            <DeleteAPIKey apiKey={apiKey} getAPIKeys={getAPIKeys} secret={props.secret}/>
+                            <DeleteAPIKey
+                                apiKey={apiKey}
+                                getAPIKeys={getAPIKeys}
+                                secret={props.secret}
+                                newKey={newKey}
+                                setNewKey={setNewKey}
+                            />
                         </div>
                     </div>
                 </React.Fragment>
