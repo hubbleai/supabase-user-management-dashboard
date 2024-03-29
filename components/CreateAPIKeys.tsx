@@ -38,10 +38,11 @@ const CreateAPIKeys = (
     props: {
         organizationMember: OrganizationMember,
         secret: string,
+        setNewKey: (newKey: APIKey) => void,
+        getAPIKeys: () => Promise<void>,
     },
 ) => {
     const [label, setLabel] = useState('My New Key');
-    const [key, setKey] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -76,12 +77,13 @@ const CreateAPIKeys = (
                 description: 'API Key Creation Failed',
             });
         } else {
+            await props.getAPIKeys()
             const newKey: APIKey = await response.json()
 
             toast({
                 description: 'New API Key Created',
             });
-            setKey(newKey.token_hash);
+            props.setNewKey(newKey);
             setIsDialogOpen(false); // Close the dialog on success
         }
         setIsLoading(false);
@@ -132,15 +134,6 @@ const CreateAPIKeys = (
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
-            {key && (
-                <div className="mt-4">
-                    <h3 className="text-lg font-semibold">New API Key</h3>
-                    <p className="text-sm text-zinc-500">
-                        Save this key, it will not be shown again.
-                    </p>
-                    <div className="mt-2 rounded-lg bg-zinc-100 p-4">{key}</div>
-                </div>
-            )}
         </div>
     );
 }
