@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button';
 import {
     Command,
     CommandEmpty,
