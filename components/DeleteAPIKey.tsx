@@ -5,7 +5,7 @@ import { useAuthStore } from '@/store/useAuthStore';
 import { useToast } from "./ui/use-toast";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
 import { APIKey } from "./CreateAPIKeys";
-import { Button } from "./ui/button";
+import { Button } from "./ui/Button";
 import Loader from "./ui/Loader";
 import { Trash } from "lucide-react";
 import { requestCarbon } from "@/utils/carbon";

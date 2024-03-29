@@ -3,7 +3,7 @@
 import { useInvitesStore } from '@/store/useInvitesStore';
 import { createClient } from '@/utils/supabase/client';
 import React from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button';
 import { Invite, InviteStatus } from '@/types/supabase';
 import { useToast } from '@/components/ui/use-toast';
 import { useAuthStore } from '@/store/useAuthStore';

@@ -6,7 +6,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { InviteStatus, RoleId } from '@/types/supabase';
 import Loader from '@/components/ui/Loader';
 import { useOrgsStore } from '@/store/useOrgsStore';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button';
 import { PlusCircle } from 'lucide-react';
 import {
     Select,
