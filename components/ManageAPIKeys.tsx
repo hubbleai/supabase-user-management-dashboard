@@ -7,6 +7,12 @@ import { User } from '@supabase/supabase-js';
 import DeleteAPIKey from './DeleteAPIKey';
 import { requestCarbon } from '@/utils/carbon';
 import { useToast } from './ui/use-toast';
+import { IoCopyOutline } from "react-icons/io5";
+import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
+
+
+
+
 
 type ListAPIKeysResponse = {
     data: APIKey[];
@@ -62,12 +68,16 @@ function ManageAPIKeys(
 
             {
                 newKey && (
-                    <div className="mb-8">
+                    <div className="mb-8 border p-4 rounded-lg">
                         <h3 className="text-lg font-semibold">New API Key</h3>
-                        <p className="text-sm text-zinc-500">
-                            Save this key, it will not be shown again.
+                        <p className="text-sm text-zinc-500 pb-2">
+                            Please save this key since it will not be shown again.
                         </p>
-                        <div className="mt-2 rounded-lg bg-zinc-100 p-4">{newKey.token_hash}</div>
+                        
+                        <div className="mt-2 rounded-lg bg-zinc-100 p-4 flex justify-between items-center">
+                            {/* added icons for you to use */} <div className="flex items-center"><IoEyeOffOutline className="mr-2"/><IoEyeOutline className="mr-2"/>{newKey.token_hash}</div>
+                            <div><IoCopyOutline/></div>
+                        </div>
                     </div>
                 )
             }

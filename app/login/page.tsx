@@ -208,23 +208,25 @@ const LoginForm = ({
                     ? 'Signing In...'
                     : 'Sign In'}
             </button>
-            <div className="flex flex-col justify-center items-center">
-                <button
-                    type="button"
-                    onClick={() => setLoginPageForm(LoginPageForm.PASSWORD_RESET)}
-                    disabled={authState !== AuthState.Idle}
-                    className="w-fit focus:outline-none  justify-center text-zinc-500 hover:text-zinc-700 text-sm underline"
-                >
-                    Need to reset your password?
-                </button>
-                <p className="text-sm text-zinc-500">or</p>
+            <div className="flex flex-row justify-center items-center">
+
                 <button
                     type="button"
                     onClick={() => setLoginPageForm(LoginPageForm.SIGNUP)}
                     disabled={authState !== AuthState.Idle}
                     className="w-fit focus:outline-none  justify-center text-zinc-500 hover:text-zinc-700 text-sm underline"
                 >
-                    Create an account.
+                    Create an account
+                </button>
+                <p className="text-sm text-zinc-500 px-1">or</p>
+
+                <button
+                    type="button"
+                    onClick={() => setLoginPageForm(LoginPageForm.PASSWORD_RESET)}
+                    disabled={authState !== AuthState.Idle}
+                    className="w-fit focus:outline-none  justify-center text-zinc-500 hover:text-zinc-700 text-sm underline"
+                >
+                    Reset your password
                 </button>
             </div>
         </div>
