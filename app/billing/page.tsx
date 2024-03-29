@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button';
 import { authenticatePage } from '@/utils/auth';
 import { Link2 } from 'lucide-react';
 import React from 'react';

@@ -1,10 +1,9 @@
 'use client';
 
-import Link from 'next/link';
 import Image from 'next/image';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button';
 import {
     Command,
     CommandEmpty,
@@ -26,26 +25,23 @@ function OrgSelector() {
     const { activeOrg, orgs, loading, setActiveOrg } = useOrgsStore();
 
     if (loading || !orgs.length) {
-        return (      
+        return (
             <Image
                 src="/logo-carbon.png"
                 width={150}
-                height={100}
-                alt="Picture of the author"
+                height={39.45}
+                alt="Carbon Logo"
             />
-
         );
     }
     return (
         <div className="flex items-center">
-                
             <Image
-                src="logo-carbon.png"
+                src="/logo-carbon.png"
                 width={150}
-                height={100}
-                alt="Picture of the author"
+                height={39.45}
+                alt="Carbon Logo"
             />
-
 
             <div className="flex items-center animate-in">
                 <div className="mx-4 h-6 w-[1px] rotate-[20deg] bg-zinc-400"></div>

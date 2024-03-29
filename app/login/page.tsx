@@ -11,7 +11,8 @@ import Loader from '@/components/ui/Loader';
 const supabase = createClient();
 
 enum LoginPageForm {
-    AUTHENTICATION = "AUTHENTICATION",
+    LOGIN = "LOGIN",
+    SIGNUP = "SIGNUP",
     PASSWORD_RESET = "PASSWORD_RESET",
 }
 
@@ -27,7 +28,7 @@ export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const [loginPageForm, setLoginPageForm] = useState(LoginPageForm.AUTHENTICATION)
+    const [loginPageForm, setLoginPageForm] = useState(LoginPageForm.LOGIN)
     const [authState, setAuthState] = useState(AuthState.Idle);
 
     const { user, loading } = useAuthStore();
@@ -106,22 +107,32 @@ export default function Login() {
                 <Suspense fallback={<div>Loading...</div>}>
                     <SearchParamsComponent />
                 </Suspense>
-                { 
-                    loginPageForm == LoginPageForm.AUTHENTICATION && 
-                    <AuthFormComponent
+                {
+                    loginPageForm === LoginPageForm.LOGIN &&
+                    <LoginForm
                         email={email}
                         setEmail={setEmail}
                         password={password}
                         setPassword={setPassword}
                         authState={authState}
-                        setAuthState={setAuthState}
                         signIn={signIn}
+                        setLoginPageForm={setLoginPageForm}
+                    />
+                }
+                {
+                    loginPageForm === LoginPageForm.SIGNUP &&
+                    <SignupForm
+                        email={email}
+                        setEmail={setEmail}
+                        password={password}
+                        setPassword={setPassword}
+                        authState={authState}
                         signUp={signUp}
                         setLoginPageForm={setLoginPageForm}
                     />
                 }
                 {
-                    loginPageForm == LoginPageForm.PASSWORD_RESET &&
+                    loginPageForm === LoginPageForm.PASSWORD_RESET &&
                     <SendEmailForResetForm
                         email={email}
                         setEmail={setEmail}
@@ -145,15 +156,13 @@ const SearchParamsComponent = () => {
     ) : null;
 }
 
-const AuthFormComponent = ({
+const LoginForm = ({
     email,
     setEmail,
     password,
     setPassword,
     authState,
-    setAuthState,
     signIn,
-    signUp,
     setLoginPageForm,
 }: {
     email: string;
@@ -161,13 +170,11 @@ const AuthFormComponent = ({
     password: string;
     setPassword: (password: string) => void;
     authState: AuthState;
-    setAuthState: (authState: AuthState) => void;
     signIn: () => Promise<void>;
-    signUp: () => Promise<void>;
     setLoginPageForm: (loginPageForm: LoginPageForm) => void;
 }) => {
     return (
-        <>
+        <div className="flex flex-col gap-2">
             <label className="text-md font-semibold" htmlFor="email">
                 Email
             </label>
@@ -201,27 +208,96 @@ const AuthFormComponent = ({
                     ? 'Signing In...'
                     : 'Sign In'}
             </button>
-            <button
-                type="button"
-                onClick={signUp}
-                disabled={authState !== AuthState.Idle}
-                className="rounded-md border border-foreground/20 px-4 py-2 text-foreground"
-            >
-                {authState === AuthState.SigningUp
-                    ? 'Signing Up...'
-                    : 'Sign Up'}
-            </button>
-            <div className="flex justify-center">
+            <div className="flex flex-row justify-center items-center">
+
+                <button
+                    type="button"
+                    onClick={() => setLoginPageForm(LoginPageForm.SIGNUP)}
+                    disabled={authState !== AuthState.Idle}
+                    className="w-fit focus:outline-none  justify-center text-zinc-500 hover:text-zinc-700 text-sm underline"
+                >
+                    Create an account
+                </button>
+                <p className="text-sm text-zinc-500 px-1">or</p>
+
                 <button
                     type="button"
                     onClick={() => setLoginPageForm(LoginPageForm.PASSWORD_RESET)}
                     disabled={authState !== AuthState.Idle}
                     className="w-fit focus:outline-none  justify-center text-zinc-500 hover:text-zinc-700 text-sm underline"
                 >
-                    Need to reset your password?
+                    Reset your password
                 </button>
             </div>
-        </>
+        </div>
+    );
+}
+
+const SignupForm = (
+    {
+        email,
+        setEmail,
+        password,
+        setPassword,
+        authState,
+        signUp,
+        setLoginPageForm,
+    }: {
+        email: string;
+        setEmail: (email: string) => void;
+        password: string;
+        setPassword: (password: string) => void;
+        authState: AuthState;
+        signUp: () => Promise<void>;
+        setLoginPageForm: (loginPageForm: LoginPageForm) => void;
+    }
+) => {
+    return (
+        <div className="flex flex-col gap-2">
+            <label className="text-md font-semibold" htmlFor="email">
+                Email
+            </label>
+            <input
+                className="mb-4 rounded-md border bg-inherit px-4 py-2"
+                name="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+            />
+            <label className="text-md font-semibold" htmlFor="password">
+                Password
+            </label>
+            <input
+                className="mb-4 rounded-md border bg-inherit px-4 py-2"
+                type="password"
+                name="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+            />
+            <button
+                type="button"
+                onClick={signUp}
+                disabled={authState !== AuthState.Idle}
+                className="mb-2 rounded-md bg-[#00A87A] px-4 py-2 text-white"
+            >
+                {authState === AuthState.SigningUp
+                    ? 'Signing Up...'
+                    : 'Sign Up'}
+            </button>
+            <div className="flex flex-col justify-center items-center">
+                <button
+                    type="button"
+                    onClick={() => setLoginPageForm(LoginPageForm.LOGIN)}
+                    disabled={authState !== AuthState.Idle}
+                    className="w-fit focus:outline-none  justify-center text-zinc-500 hover:text-zinc-700 text-sm underline"
+                >
+                    Already have an account?
+                </button>
+            </div>
+        </div>
     );
 }
 
@@ -265,10 +341,10 @@ const SendEmailForResetForm = (
                     ? 'Sending Reset Email'
                     : 'Reset Password'}
             </button>
-            <div className="flex justify-center">
+            <div className="flex flex-col justify-center items-center">
                 <button
                     type="button"
-                    onClick={() => setLoginPageForm(LoginPageForm.AUTHENTICATION)}
+                    onClick={() => setLoginPageForm(LoginPageForm.LOGIN)}
                     disabled={authState !== AuthState.Idle}
                     className="w-fit focus:outline-none  justify-center text-zinc-500 hover:text-zinc-700 text-sm underline"
                 >
