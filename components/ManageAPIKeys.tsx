@@ -7,8 +7,12 @@ import { User } from '@supabase/supabase-js';
 import DeleteAPIKey from './DeleteAPIKey';
 import { requestCarbon } from '@/utils/carbon';
 import { useToast } from './ui/use-toast';
-import { IoCloseCircleOutline, IoCopyOutline } from "react-icons/io5";
-import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
+import { 
+    IoEyeOffOutline,
+    IoEyeOutline,
+    IoCloseCircleOutline,
+    IoCopyOutline,
+} from "react-icons/io5";
 import { Button } from './ui/Button';
 
 type ListAPIKeysResponse = {
