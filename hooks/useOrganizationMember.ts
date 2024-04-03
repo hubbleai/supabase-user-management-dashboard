@@ -27,6 +27,7 @@ export type OrganizationMember = {
     organization_id: number;
     organization: Organization;
     organization_admin: boolean;
+    is_onboarded: boolean;
     created_at: Date;
     updated: Date;
 }
