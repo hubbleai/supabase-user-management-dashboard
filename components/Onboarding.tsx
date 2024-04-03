@@ -65,7 +65,10 @@ const Onboarding = (
     }
 
     return (
+       
         <div className="mx-auto mt-10 w-full px-8 sm:max-w-md">
+
+            <div className="border rounded-lg border-none py-3 px-4 text-sm mb-4 bg-green-200">You've successfully accepted the invitation! Please create your account.</div>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
                     <FormField
@@ -110,7 +113,7 @@ const Onboarding = (
                         )}
                     />
 
-                    <Button type="submit">
+                    <Button className="bg-[#00A87A] hover:bg-[#00A87A]/85" type="submit">
                         {isLoading && "Joining"}
                         {!isLoading && "Join"}
                     </Button>
