@@ -25,6 +25,7 @@ type RowProps = {
 
     // These props are used to make requests to Carbon BE
     secret: string;
+    organizationMember: OrganizationMember;
     getOrganizationMembers: () => Promise<void>;  
 }
 
@@ -45,7 +46,13 @@ const columns: ColumnDef<RowProps>[] = [
     {
         id: "actions",
         enableHiding: false,
-        cell: ({ row }) => (<OrganizationMemberActions row={row} />),
+        cell: ({ row }) => (
+            // Disable actions for the current user's row so they dont
+            // delete or demote themselves.
+            row.original.organizationMember.organization_admin && 
+            row.original.organizationMember.id !== row.original.id && 
+            <OrganizationMemberActions row={row} />
+        ),
     }
 ]
 
@@ -85,6 +92,7 @@ const Organization = (
                     name: (organizationMember.first_name || "") + " " + (organizationMember.last_name || ""),
                     isAdmin: organizationMember.organization_admin,
                     secret: props.secret,
+                    organizationMember: props.organizationMember,
                     getOrganizationMembers,
                 };
             });
@@ -239,7 +247,7 @@ const OrganizationMembersTable = (
                             }
 
                             return (
-                                <PaginationItem>
+                                <PaginationItem key={value}>
                                     <PaginationLink 
                                         className={className}
                                         onClick={() => props.setCurrentPage(value)}
@@ -311,14 +319,15 @@ const OrganizationMemberActions = (
             { 
                 ids: [props.row.original.id]
             },
-        )
+        );
         setIsLoadingDeletion(false);
 
+        setIsDeleting(false);
         if (response.status !== 200){
-            toast({ description: "An error occured."})
+            toast({ description: "An error occured."});
         } else {
-            await props.row.original.getOrganizationMembers()
-            toast({ description: "Deleted organization member"})
+            await props.row.original.getOrganizationMembers();
+            toast({ description: "Deleted organization member"});
         }
     };
 

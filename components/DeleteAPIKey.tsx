@@ -10,7 +10,7 @@ import Loader from "./ui/Loader";
 import { Trash } from "lucide-react";
 import { requestCarbon } from "@/utils/carbon";
 
-function CreateAPIKeys(
+function DeleteAPIKeys(
     props: { 
         apiKey: APIKey,
         getAPIKeys: () => Promise<void>,
@@ -59,7 +59,7 @@ function CreateAPIKeys(
     }
 
     return (
-        <div className="my-5">
+        <div>
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild>
                     <Button
@@ -93,4 +93,4 @@ function CreateAPIKeys(
     );
 }
 
-export default CreateAPIKeys;
+export default DeleteAPIKeys;

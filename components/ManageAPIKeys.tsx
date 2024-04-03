@@ -77,7 +77,7 @@ function ManageAPIKeys(
             {apiKeys.map((apiKey) => (
                 <React.Fragment key={apiKey.id}>
                     <div
-                        className="grid grid-cols-12 text-sm justify-center items-center"
+                        className="my-5 grid grid-cols-12 text-sm justify-center items-center"
                         key={apiKey.id}
                     >
                         <div className='col-span-3 font-semibold'>{apiKey.description}</div>
@@ -89,15 +89,19 @@ function ManageAPIKeys(
                             )}
                         </div>
                         <ListedApiKey value={apiKey.token_hash}/>
-                     
-                        <div className="col-span-1">
-                            <DeleteAPIKey
-                                apiKey={apiKey}
-                                getAPIKeys={getAPIKeys}
-                                secret={props.secret}
-                                newKey={newKey}
-                                setNewKey={setNewKey}
-                            />
+
+                        <div className="col-span-1 w-fill h-fill">
+                            {
+                                props.organizationMember.organization_admin && (
+                                    <DeleteAPIKey
+                                        apiKey={apiKey}
+                                        getAPIKeys={getAPIKeys}
+                                        secret={props.secret}
+                                        newKey={newKey}
+                                        setNewKey={setNewKey}
+                                    />
+                                )
+                            }
                         </div>
                     </div>
                 </React.Fragment>
