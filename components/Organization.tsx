@@ -100,13 +100,18 @@ const Organization = (
 
     return (
         <div>
-            <h1 className="my-8 scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-                My Organization
-            </h1>
+            <div className="flex items-center justify-between mt-10 mb-8">
+                <div>
+                    <h1 className="font-bold text-lg">Manage Users</h1>
+                    <p className="">Invite users and manage user permissions.</p>
+                </div>
 
-            <div className="flex justify-between">
-                <h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
-                    Members
+
+            </div>
+          
+            <div className="flex justify-between items-center mb-4">
+                <h2 className="scroll-m-20 text-lg font-semibold tracking-tight first:mt-0">
+                    Users
                 </h2>
                 
                 <InviteButton
