@@ -92,14 +92,19 @@ const CreateAPIKeys = (
     return (
         <div className="">
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogTrigger asChild>
-                    <Button
-                        variant="outline"
-                        onClick={() => setIsDialogOpen(true)}
-                    >
-                        Create New API Key
-                    </Button>
-                </DialogTrigger>
+                {
+                    props.organizationMember.organization_admin && (
+                        <DialogTrigger asChild>
+                            <Button
+                                variant="outline"
+                                onClick={() => setIsDialogOpen(true)}
+                            >
+                                Create New API Key
+                            </Button>
+                        </DialogTrigger>
+                    )
+                }
+
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
                         <DialogTitle className="pb-2">Create New Key</DialogTitle>
