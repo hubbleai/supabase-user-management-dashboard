@@ -17,18 +17,47 @@ import { IoMdHelpCircleOutline } from "react-icons/io";
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
+import { useEffect, useState } from 'react';
+import { OrganizationMember } from '@/hooks/useOrganizationMember';
+import { requestCarbon } from '@/utils/carbon';
 
 const supabase = createClient();
 
-export default function UserNav() {
+type isPaigoEligibleResponse = {
+    is_eligible: boolean
+}
+
+export default function UserNav(props: {
+    secret: string | null
+}) {
+    const [showBilling, setShowBilling] = useState(false);
+
     const router = useRouter();
+    const { user } = useAuthStore();
+
+    const isPaigoEligible = async () => {
+        if (props.secret) {
+            const response = await requestCarbon(
+                props.secret,
+                "GET",
+                "/billing/paigo/is_eligible",
+            )
+            if (response.status == 200) {
+                const deserializedResponse: isPaigoEligibleResponse = await response.json()
+                console.log("SHOW BILLING:", deserializedResponse.is_eligible)
+                setShowBilling(deserializedResponse.is_eligible)
+            }
+        }
+    }
 
     const signOut = async () => {
         await supabase.auth.signOut();
         router.push('/login');
     };
 
-    const { user } = useAuthStore();
+    useEffect(() => {
+        isPaigoEligible()
+    }, [])
 
     if (!user) {
         return null;
@@ -75,6 +104,16 @@ export default function UserNav() {
                             My Organization
                         </button>
                     </DropdownMenuItem>
+
+                    {
+                        showBilling && (
+                            <DropdownMenuItem className="">
+                                <button onClick={() => router.push("/billing")}>
+                                    Billing
+                                </button>
+                            </DropdownMenuItem>
+                        )
+                    }
                    
                     {/* <DropdownMenuItem>
                         <button onClick={() => router.push("/carbon-connect")}>
