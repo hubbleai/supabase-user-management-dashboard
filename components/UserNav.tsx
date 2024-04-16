@@ -55,7 +55,7 @@ export default function UserNav(props: {
 
     useEffect(() => {
         isPaigoEligible()
-    }, [])
+    }, [props.secret])
 
     if (!user) {
         return null;
