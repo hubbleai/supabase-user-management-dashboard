@@ -91,22 +91,22 @@ export default function UserNav(props: {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                    <DropdownMenuItem className="">
-                        <button onClick={() => router.push("/api-keys")}>
-                            Manage API Keys
+                    <DropdownMenuItem>
+                        <button className="w-full text-start" onClick={() => router.push("/api-keys")}>
+                            API Keys
                         </button>
                     </DropdownMenuItem>
 
-                    <DropdownMenuItem className="">
-                        <button onClick={() => router.push("/organization")}>
-                            My Organization
+                    <DropdownMenuItem>
+                        <button className="w-full text-start" onClick={() => router.push("/organization")}>
+                            Organization
                         </button>
                     </DropdownMenuItem>
 
                     {
                         showBilling && (
-                            <DropdownMenuItem className="">
-                                <button onClick={() => router.push("/billing")}>
+                            <DropdownMenuItem>
+                                <button className="w-full text-start" onClick={() => router.push("/billing")}>
                                     Billing
                                 </button>
                             </DropdownMenuItem>

@@ -1,10 +1,7 @@
 import React from 'react';
 import OrgSelector from '@/components/OrgSelector';
 import UserNav from '@/components/UserNav';
-import { authenticatePage } from '@/utils/auth';
 import { getUserOnServer } from '@/utils/supabase/user';
-import { useServerOrganizationMember } from '@/hooks/useOrganizationMember';
-
 
 async function Navbar() {
     const user_data = await getUserOnServer();

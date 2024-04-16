@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import { useState, Suspense, useEffect } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { AlertCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -43,11 +43,11 @@ export default function Login() {
         );
         setAuthState(AuthState.Idle);
 
-        return router.push(
-            error
-                ? "/login?message=Could not authenticate user"
-                : "/api-keys"
-        )
+        if (error) {
+            router.push("/login?message=Could not authenticate user")
+        } else {
+            router.refresh()
+        }
     };
 
     const signUp = async () => {
@@ -87,10 +87,11 @@ export default function Login() {
         )
     } 
 
-    if (user) {
-        router.push('/api-keys');
-        return null;
-    }
+    useEffect(() => {
+        if (user) {
+            router.push('/api-keys');
+        }
+    }, [user])
 
     if (loading) {
         return (

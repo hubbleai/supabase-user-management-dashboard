@@ -41,7 +41,11 @@ const Billing = (
     }, [])
 
     if (!token) {
-        return <Loader />
+        return (
+            <div className="mx-auto mt-10 flex w-full items-center justify-center">
+                <Loader />
+            </div>
+        );
     }
 
     return (
