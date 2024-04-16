@@ -93,7 +93,7 @@ export default function Login() {
         }
     }, [user])
 
-    if (loading) {
+    if (user || loading) {
         return (
             <div className="mx-auto mt-10 flex w-full items-center justify-center">
                 <Loader />
