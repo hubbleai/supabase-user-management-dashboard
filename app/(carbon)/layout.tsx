@@ -1,7 +1,6 @@
 import { GeistSans } from 'geist/font/sans';
-import './globals.css';
+import '../globals.css';
 import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import { Toaster } from '@/components/ui/toaster';
 import SecondaryNavbar from '@/components/SecondaryNavbar';
 import Syncer from '@/components/Syncer';
@@ -28,7 +27,7 @@ export default function RootLayout({
                     <Syncer />
                     <Navbar />
                     <SecondaryNavbar />
-                    <div className="w-full max-w-4xl px-3 opacity-0 animate-in">
+                    <div className="w-full max-w-4xl opacity-0 animate-in">
                         {children}
                     </div>
                     <Toaster />
