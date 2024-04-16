@@ -21,25 +21,29 @@ const Checkout = (
 
     const queries = useSearchParams();
     const planId = queries.get("planId")
+    const planName = queries.get("planName")
+    const priceText = queries.get("priceText")
 
     const { toast } = useToast();
 
     const getPaigoCheckoutToken = async () => {
-        if (!planId) {
-            const response = await requestCarbon(props.secret, "GET", "/billing/paigo/checkout")
-            if (response.status !== 200) {
-                toast({ description: "An error occured. Please try again." })
-            } else {
-                const deserializedResponse: GetPaigoCheckoutTokenResponse = await response.json()
-                setPaigoParams(new URLSearchParams({
-                    token: deserializedResponse.access_token
-                }))
-            }
+        const response = await requestCarbon(props.secret, "GET", "/billing/paigo/checkout")
+        if (response.status !== 200) {
+            toast({ description: "An error occured. Please try again." })
+            return
+        }
 
+        const deserializedResponse: GetPaigoCheckoutTokenResponse = await response.json()
+        if (!planId) {
+            setPaigoParams(new URLSearchParams({
+                token: deserializedResponse.access_token
+            }))
         } else {
             setPaigoParams(new URLSearchParams({
-                token: process.env.NEXT_PUBLIC_PAIGO_CHECKOUT_TOKEN || "",
+                token: deserializedResponse.access_token,
                 offeringId: planId,
+                planName: planName || "",
+                priceText: priceText || "",
                 name: props.organizationMember.organization.name,
                 email: props.organizationMember.email,
                 customerId: String(props.organizationMember.organization_id),

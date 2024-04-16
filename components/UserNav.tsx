@@ -18,7 +18,6 @@ import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useEffect, useState } from 'react';
-import { OrganizationMember } from '@/hooks/useOrganizationMember';
 import { requestCarbon } from '@/utils/carbon';
 
 const supabase = createClient();
@@ -44,7 +43,6 @@ export default function UserNav(props: {
             )
             if (response.status == 200) {
                 const deserializedResponse: isPaigoEligibleResponse = await response.json()
-                console.log("SHOW BILLING:", deserializedResponse.is_eligible)
                 setShowBilling(deserializedResponse.is_eligible)
             }
         }
@@ -65,8 +63,8 @@ export default function UserNav(props: {
 
     return (
         <DropdownMenu>
-              <Link href="mailto:derek@carbon.ai" className="flex border px-3 hover:bg-gray-50 py-1 rounded-md items-center gap-2"><IoMdHelpCircleOutline /> Help</Link>       
-                    <Link href="https://docs.carbon.ai" className="flex border px-3 hover:bg-gray-50 py-1 rounded-md items-center gap-2"><IoBookOutline /> Docs</Link>
+            <Link href="mailto:derek@carbon.ai" className="flex border px-3 hover:bg-gray-50 py-1 rounded-md items-center gap-2"><IoMdHelpCircleOutline /> Help</Link>       
+            <Link href="https://docs.carbon.ai" className="flex border px-3 hover:bg-gray-50 py-1 rounded-md items-center gap-2"><IoBookOutline /> Docs</Link>
 
             <DropdownMenuTrigger asChild>
                 <Button
