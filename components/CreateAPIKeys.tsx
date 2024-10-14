@@ -29,6 +29,7 @@ export type APIKey = {
     customer_email: string;
     organization_id: number;
     organization_name: string,
+    is_hashed: boolean;
     expires_at: Date,
     created_at: Date,
     updated_at: Date,
