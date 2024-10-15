@@ -22,6 +22,7 @@ type RowProps = {
     email: string;
     name: string;
     isAdmin: boolean;
+    canReceiveAlerts: boolean;
 
     // These props are used to make requests to Carbon BE
     secret: string;
@@ -44,13 +45,17 @@ const columns: ColumnDef<RowProps>[] = [
         cell: ({ row }) => (row.original.isAdmin && <IoCheckmarkCircleOutline className="ml-4"/>),
     },
     {
+        accessorKey: "alerts",
+        header: "Alerts",
+        cell: ({ row }) => (row.original.canReceiveAlerts && <IoCheckmarkCircleOutline className="ml-4"/>),
+    },
+    {
         id: "actions",
         enableHiding: false,
         cell: ({ row }) => (
             // Disable actions for the current user's row so they dont
             // delete or demote themselves.
-            row.original.organizationMember.organization_admin && 
-            row.original.organizationMember.id !== row.original.id && 
+            row.original.organizationMember.organization_admin &&
             <OrganizationMemberActions row={row} />
         ),
     }
@@ -91,6 +96,7 @@ const Organization = (
                     email: organizationMember.email + (organizationMember.is_onboarded ? "" : ` [Invited]`),
                     name: (organizationMember.first_name || "") + " " + (organizationMember.last_name || ""),
                     isAdmin: organizationMember.organization_admin,
+                    canReceiveAlerts: organizationMember.can_receive_alerts,
                     secret: props.secret,
                     organizationMember: props.organizationMember,
                     getOrganizationMembers,
@@ -289,7 +295,7 @@ const OrganizationMemberActions = (
 
     const { toast } = useToast()
 
-    const updateOrganizationMember = async () => {
+    const updateOrganizationMember = async (property: string) => {
         setIsLoadingUpdate(true);
         const response = await requestCarbon(
             props.row.original.secret,
@@ -297,7 +303,8 @@ const OrganizationMemberActions = (
             "/customer/update",
             { 
                 id: props.row.original.id,
-                organization_admin: !props.row.original.isAdmin,
+                organization_admin: property === "admin" ? !props.row.original.isAdmin : props.row.original.isAdmin,
+                can_receive_alerts: property === "alerts" ? !props.row.original.canReceiveAlerts : props.row.original.canReceiveAlerts,
             },
         )
         setIsLoadingUpdate(false);
@@ -306,7 +313,7 @@ const OrganizationMemberActions = (
             toast({ description: "An error occured."})
         } else {
             await props.row.original.getOrganizationMembers()
-            toast({ description: "Updated member's role"})
+            toast({ description: "Updated member"})
         }
     };
 
@@ -372,18 +379,32 @@ const OrganizationMemberActions = (
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent align="end">
-                    <DropdownMenuItem
-                        onClick={updateOrganizationMember}
-                    >
-                        { props.row.original.isAdmin ? "Remove" : "Make" } Admin
-                    </DropdownMenuItem>
+                    {
+                        props.row.original.organizationMember.id !== props.row.original.id && (
+                            <DropdownMenuItem
+                                onClick={() => updateOrganizationMember("admin")}
+                            >
+                                { props.row.original.isAdmin ? "Remove" : "Make" } Admin
+                            </DropdownMenuItem>
+                        )
+                    }
 
                     <DropdownMenuItem
-                        className="text-red-600"
-                        onClick={() => setIsDeleting(true)}
+                        onClick={() => updateOrganizationMember("alerts")}
                     >
-                        Delete
+                        { props.row.original.canReceiveAlerts ? "Disable" : "Enable" } Alerts
                     </DropdownMenuItem>
+
+                    {
+                        props.row.original.organizationMember.id !== props.row.original.id && (
+                            <DropdownMenuItem
+                                className="text-red-600"
+                                onClick={() => setIsDeleting(true)}
+                            >
+                                Delete
+                            </DropdownMenuItem>
+                        )
+                    }
                 </DropdownMenuContent>
             </DropdownMenu>
         </Fragment>
